@@ -12,7 +12,6 @@ jobs:
   progimage-api-infra-play-deployment:
     runs-on: ubuntu-latest
     steps:
-
       - name: Checkout public repo
         uses: actions/checkout@master
 

@@ -3,6 +3,7 @@ on:
   push:
     tags:
       - DELETE-ALL-*
+      
 jobs:
   delete-aws-resources-play:
     runs-on: ubuntu-latest

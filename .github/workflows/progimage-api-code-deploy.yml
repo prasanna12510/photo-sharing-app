@@ -5,7 +5,7 @@ on:
       - master
     tags:
       - PROGIMAGE-API-PLAY-CODE-*
-
+      
 jobs:
   progimage-download-api-deployment:
     name: Deploy download image-api

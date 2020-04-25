@@ -6,7 +6,7 @@ on:
     tags:
       - CLOUDSRE-GENERIC-*
     paths:
-      - "generic/**.tf"
+      - "aws-generic-resources/**.tf"
 jobs:
   deploy-cloud-sre-aws-play:
     runs-on: ubuntu-latest
@@ -20,7 +20,7 @@ jobs:
 
       - name: Apply Cloudsre generic resources
         run: make terraform-apply
-        working-directory: generic/
+        working-directory: aws-generic-resources/
         env:
           TF_IN_AUTOMATION: true
           TF_WORKSPACE: play

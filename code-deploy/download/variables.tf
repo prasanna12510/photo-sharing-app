@@ -2,7 +2,7 @@
 variable "lambda_name" {
   type        = string
   description = "lambda function name"
-  default     = "convert-image"
+  default     = "download-image"
 }
 
 variable "lambda_runtime" {
@@ -14,13 +14,13 @@ variable "lambda_runtime" {
 variable "lambda_function_decsription" {
   type        = string
   description = "lambda function description"
-  default     = "Lambda function which converts image from one format to another"
+  default     = "Lambda function which downloads image based on image_id"
 }
 
 variable "lambda_handler_name" {
   type        = string
-  description = "lambda function handler name to convert image"
-  default     = "convert_image.lambda_handler"
+  description = "lambda function handler name to download image"
+  default     = "download_image.lambda_handler"
 }
 
 variable "lambda_timeout" {

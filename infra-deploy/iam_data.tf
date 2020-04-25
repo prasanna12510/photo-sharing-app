@@ -48,9 +48,7 @@ data "aws_iam_policy_document" "lambda_runtime_policy" {
   statement {
     sid       = "AllowAccessToS3Bucket"
     effect    = "Allow"
-    resources = [
-                "arn:aws:s3:::${local.s3_bucket_name}",
-                "arn:aws:s3:::${local.s3_bucket_name}/*"]
+    resources = ["arn:aws:s3:::${local.lambda_source_code_bucket_name}/*"]
     actions   = var.custom_policy_actions.lambda_s3
   }
 }

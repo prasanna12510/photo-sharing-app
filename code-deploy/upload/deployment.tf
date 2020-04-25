@@ -17,17 +17,17 @@ data "aws_caller_identity" "current" {}
 #####create archive for lambda function #######
 data "null_data_source" "lambda_file" {
   inputs = {
-    filename = "${path.module}/src/convert_image.py"
+    filename = "${path.module}/src/upload_image.py"
   }
 }
 
 data "null_data_source" "lambda_archive" {
   inputs = {
-    filename = "${path.module}/src/convert_image.zip"
+    filename = "${path.module}/src/upload_image.zip"
   }
 }
 
-data "archive_file" "convert_image" {
+data "archive_file" "upload_image" {
   type        = "zip"
   source_file = data.null_data_source.lambda_file.outputs.filename
   output_path = data.null_data_source.lambda_archive.outputs.filename
@@ -41,8 +41,8 @@ module  "lambda_source_upload" {
   write_objects = local.write_object_to_s3
 }
 
-################lambda for convert images#########
-module "convert_image_lambda" {
+################lambda for upload images#########
+module "upload_image_lambda" {
   source                 = "../../modules/terraform/aws/lambda/function"
   vpc_subnet_ids         = local.private_subnet_ids
   vpc_security_group_ids = [local.lambda_security_group_id]
@@ -53,7 +53,7 @@ module "convert_image_lambda" {
   timeout                = var.lambda_timeout
   func_name              = var.lambda_name
   func_handler           = var.lambda_handler_name
-  source_code_hash       = base64sha256(data.archive_file.convert_image[0].output_path)
+  source_code_hash       = base64sha256(data.archive_file.upload_image[0].output_path)
   description            = var.lambda_function_decsription
   tags                   = local.tags
   environment_variables  = {
@@ -64,56 +64,56 @@ module "convert_image_lambda" {
 }
 
 #########################api gateway integration with lambda##################################
-module "convert_image_lambda_permission" {
+module "upload_image_lambda_permission" {
   source        = "../../modules/terraform/aws/lambda/permission"
   create        = true
   statement_id  = var.lambda_permission.statement_id
   action        = var.lambda_permission.action
-  function_name = module.convert_image_lambda.func_name
+  function_name = module.upload_image_lambda.func_name
   principal     = var.lambda_permission.principal
   source_arn    = local.apigw_source_arn
 }
 
 
 ########api gateway method integration with lambda#######
-module  "convert_api_resource" {
+module  "upload_api_resource" {
   rest_api_id = data.terraform_remote_state.photo_sharing_infra_state.outputs.api_id
   parent_id   = "${aws_api_gateway_rest_api.api.root_resource_id}"
-  path_part   = "convert"
+  path_part   = "upload"
 }
 
-module "convert_image_api_method" {
+module "upload_image_api_method" {
   source             = "../../modules/terraform/aws/api_gateway/rest_api_method"
   api_id             = data.terraform_remote_state.photo_sharing_infra_state.outputs.api_id
-  integration_type   = "AWS_PROXY"
-  http_method        = "GET"
-  lambda_fuction_arn = module.convert_image_lambda.arn
-  api_resource_id    = "${module.convert_api_resource.api_resource_id}"
-  api_resource_path  = "${module.convert_api_resource.api_resource_path}"
+  integration_type   = "AWS"
+  http_method        = "POST"
+  lambda_fuction_arn = module.upload_image_lambda.arn
+  api_resource_id    = "${module.upload_api_resource.api_resource_id}"
+  api_resource_path  = "${module.upload_api_resource.api_resource_path}"
 }
 
 
 # deploy api
-module  "convert_image_api_deployment" {
+module  "upload_image_api_deployment" {
   source             = "../../modules/terraform/aws/api_gateway/rest_api_deployment"
   api_id             = data.terraform_remote_state.photo_sharing_infra_state.outputs.api_id
   stage_name         = "development"
-  description        = "Deploy methods: ${module.convert_image_api_method.http_method}"
+  description        = "Deploy methods: ${module.upload_image_api_method.http_method}"
 }
 ########################outputs###########################
 
-output "convert_image_lambda_arn" {
-  value = module.convert_image_lambda.arn
+output "upload_image_lambda_arn" {
+  value = module.upload_image_lambda.arn
 }
 
-output "convert_image_api_method_id" {
-  value = module.convert_image_api_method.id
+output "upload_image_api_method_id" {
+  value = module.upload_image_api_method.id
 }
 
-output "convert_image_api_invoke_url" {
-  value = module.convert_image_api_deployment.invoke_url
+output "upload_image_api_invoke_url" {
+  value = module.upload_image_api_deployment.invoke_url
 }
 
 output "apigw_execution_arn" {
-  value = module.convert_image_api_deployment.execution_arn
+  value = module.upload_image_api_deployment.execution_arn
 }

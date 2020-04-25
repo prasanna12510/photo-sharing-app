@@ -1,0 +1,132 @@
+name: progimage-api-code-deploy
+on:
+  push:
+    branches:
+      - master
+    tags:
+      - PROGIMAGE-API-PLAY-CODE-*
+
+jobs:
+  progimage-download-api-deployment:
+    name: Deploy download image-api
+    runs-on: ubuntu-latest
+    steps:
+      - name: checkout public repo
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 100
+
+      - uses: marceloprado/has-changed-path@master
+        id: changed-code-deploy-download
+        with:
+          paths: code-deploy/download code-deploy/download/src
+
+      - name: Get the latest terraform version
+        run: make terraform-install
+
+      - name: Apply terraform
+        if: steps.changed-code-deploy-download.outputs.changed == 'true'
+        run: |
+          export APP_TAG=`sed -e 's/^"//' -e 's/"$//' <<<"$MASTER_COMMIT_ID" | cut -c1-7` && sed -i -e "s/APP_TAG/$APP_TAG/g" *.tf
+          make terraform-apply
+        working-directory: code-deploy/download
+        env:
+          TF_IN_AUTOMATION: true
+          TF_WORKSPACE: play
+          TF_CLOUD_TOKEN: ${{ secrets.TF_CLOUD_TOKEN }}
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_KEY }}
+          MASTER_COMMIT_ID: ${{ toJson(github.sha) }}
+
+  progimage-upload-api-deployment:
+    name: Deploy upload image-api
+    runs-on: ubuntu-latest
+    steps:
+      - name: checkout public repo
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 100
+
+      - uses: marceloprado/has-changed-path@master
+        id: changed-code-deploy-upload
+        with:
+          paths: code-deploy/upload code-deploy/upload/src
+
+      - name: Get the latest terraform version
+        run: make terraform-install
+
+      - name: Apply terraform
+        if: steps.changed-code-deploy-upload.outputs.changed == 'true'
+        run: |
+          export APP_TAG=`sed -e 's/^"//' -e 's/"$//' <<<"$MASTER_COMMIT_ID" | cut -c1-7` && sed -i -e "s/APP_TAG/$APP_TAG/g" *.tf
+          make terraform-apply
+        working-directory: code-deploy/upload
+        env:
+          TF_IN_AUTOMATION: true
+          TF_WORKSPACE: play
+          TF_CLOUD_TOKEN: ${{ secrets.TF_CLOUD_TOKEN }}
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_KEY }}
+          MASTER_COMMIT_ID: ${{ toJson(github.sha) }}
+
+  progimage-convert-api-deployment:
+    name: Deploy convert image-api
+    runs-on: ubuntu-latest
+    steps:
+      - name: checkout public repo
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 100
+
+      - uses: marceloprado/has-changed-path@master
+        id: changed-code-deploy-convert
+        with:
+          paths: code-deploy/convert code-deploy/convert/src
+
+      - name: Get the latest terraform version
+        run: make terraform-install
+
+      - name: Apply terraform
+        if: steps.changed-code-deploy-download.outputs.changed == 'true'
+        run: |
+          export APP_TAG=`sed -e 's/^"//' -e 's/"$//' <<<"$MASTER_COMMIT_ID" | cut -c1-7` && sed -i -e "s/APP_TAG/$APP_TAG/g" *.tf
+          make terraform-apply
+        working-directory: code-deploy/convert
+        env:
+          TF_IN_AUTOMATION: true
+          TF_WORKSPACE: play
+          TF_CLOUD_TOKEN: ${{ secrets.TF_CLOUD_TOKEN }}
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_KEY }}
+          MASTER_COMMIT_ID: ${{ toJson(github.sha) }}
+
+  progimage-thumbnail-api-deployment:
+    name: Deploy thumbnail image-api
+    runs-on: ubuntu-latest
+    steps:
+      - name: checkout public repo
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 100
+
+      - uses: marceloprado/has-changed-path@master
+        id: changed-code-deploy-thumbnail
+        with:
+          paths: code-deploy/thumbnail code-deploy/thumbnail/src
+
+      - name: Get the latest terraform version
+        run: make terraform-install
+
+      - name: Apply terraform
+        if: steps.changed-code-deploy-thumbnail.outputs.changed == 'true'
+        run: |
+          export APP_TAG=`sed -e 's/^"//' -e 's/"$//' <<<"$MASTER_COMMIT_ID" | cut -c1-7` && sed -i -e "s/APP_TAG/$APP_TAG/g" *.tf
+          make terraform-apply
+        working-directory: code-deploy/thumbnail
+        env:
+          TF_IN_AUTOMATION: true
+          TF_WORKSPACE: play
+          TF_CLOUD_TOKEN: ${{ secrets.TF_CLOUD_TOKEN }}
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_KEY }}
+          MASTER_COMMIT_ID: ${{ toJson(github.sha) }}

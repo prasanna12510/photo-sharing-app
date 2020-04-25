@@ -1,12 +1,11 @@
 #route53 variables
 variable "hosted_zone_name" {
-  default = "play-hooq.tv"
+  default = "mywebapplication.ml"
 }
 
 variable "certificate_domain_name" {
-  default = "*.play-hooq.tv"
+  default = "*.mywebapplication.ml"
 }
-
 #s3 bucket variables
 variable "acl"{
   description = "Access Control List"

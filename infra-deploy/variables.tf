@@ -9,12 +9,6 @@ variable "env" {
   }
 }
 
-
-variable "azs" {
-  description = "Availability Zones in AWS to be use"
-  default     = ["ap-southeast-1a", "ap-southeast-1b", "ap-southeast-1c"]
-}
-
 variable "service_name" {
   description = "Tag: Service Name for all resources"
   default     = "photo-sharing"
@@ -29,6 +23,9 @@ variable "tag" {
   default = "APP_TAG"
 }
 
+variable "hosted_zone_name" {
+  default = "mywebapplication.ml"
+}
 
 variable "assume_role_principle" {
   type = map
@@ -42,7 +39,10 @@ variable "custom_policy_actions" {
   type = map
   default = {
 
-    "lambda_s3" = ["s3:*"]
+    "lambda_s3" = [
+      "s3:PutObject",
+      "s3:GetObject"
+    ]
 
     "lambda_executor" = [
       "lambda:InvokeFunction"
@@ -88,13 +88,7 @@ variable "custom_policy_resources" {
   }
 }
 
-variable "aws_iam_managed_policy_arns" {
-  type = list
-  default = [
-    "",
-  ]
-}
-
+#security_group variables
 variable "any_port" {
   default = "0"
 }
@@ -114,4 +108,31 @@ variable "tcp_protocol" {
 variable "all_ips" {
   default     = ["0.0.0.0/0"]
   description = "CIDR block to accept traffic from any ip"
+}
+
+# api-gateway variables
+variable "api_name" {
+  default = "image_box"
+}
+variable "api_description" {
+  default = "Image box to store, retrieve and transform images "
+}
+variable "region" {
+  default = "ap-southeast-1"
+}
+
+#s3 bucket variables
+variable "acl"{
+  description = "Access Control List"
+  default     = "private"
+}
+
+variable "versioning"{
+  description = "Versioning"
+  default     = true
+}
+
+variable "force-destroy"{
+  description = "Force Destroy Option"
+  default     = true
 }

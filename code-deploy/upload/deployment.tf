@@ -90,8 +90,8 @@ module "upload_image_api_method" {
   integration_type   = "AWS"
   http_method        = "POST"
   lambda_fuction_arn = module.upload_image_lambda.arn
-  api_resource_id    = module.upload_api_resource.api_resource_id
-  api_resource_path  = module.upload_api_resource.api_resource_path
+  api_resource_id    = module.upload_api_resource.resource_id
+  api_resource_path  = module.upload_api_resource.resource_path
 }
 
 

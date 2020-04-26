@@ -2,7 +2,7 @@
 locals {
 
   write_object_to_s3       = [{
-                                source = data.archive_file.upload_image[0].output_path
+                                source = data.archive_file.upload_image.output_path
                                 key = "v${var.commit_sha}/upload_image.zip"
                               }]
 

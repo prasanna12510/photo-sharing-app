@@ -16,7 +16,7 @@ resource "aws_api_gateway_integration" "api-method-integration_proxy" {
   type                    = var.integration_type
   uri                     = var.lambda_proxy ? "arn:aws:apigateway:${var.region}:lambda:path/2015-03-31/functions/${var.lambda_fuction_arn}/invocations" :  "arn:aws:apigateway:${var.region}:s3:path/${var.bucket_name}/{id}/{filename}"
   request_parameters      = var.integration_request_parameters
-  #content_handling        = "CONVERT_TO_TEXT"
+  content_handling        = "CONVERT_TO_TEXT"
   depends_on              = [aws_api_gateway_method.api-method]
 }
 
@@ -57,7 +57,7 @@ resource "aws_api_gateway_integration_response" "ok-integration-response" {
   }
 }
 
-/*
+
 ####By default enable options
 
 #OPTIONS method
@@ -120,11 +120,15 @@ resource "aws_api_gateway_integration" "itemOptionsMethod-ApiProxyIntegration" {
   type        = "MOCK"
   depends_on  = [aws_api_gateway_method.itemOptionsMethod]
 
-  request_templates = {
-    "application/json" = ""
+  request_templates ={
+    "application/json" = <<EOF
+        {
+        "statusCode" : 200
+        }
+EOF
   }
 }
-*/
+
 
 resource "aws_api_gateway_deployment" "api_deployment" {
   rest_api_id = var.api_id

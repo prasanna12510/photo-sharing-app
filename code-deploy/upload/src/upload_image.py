@@ -7,8 +7,11 @@ import logging
 s3 = boto3.client('s3')
 
 def lambda_handler(event, context):
+
+    if 'LOG_EVENTS' in os.environ and os.environ['LOG_EVENTS'] == 'True':
+        logging.warning('Event logging enabled: `{}`'.format(json.dumps(event)))
+
     if event['httpMethod'] == 'POST' :
-        print event['body']
         data = json.loads(event['body'])
         image_name= data['name']
         image_id = str(uuid.uuid4())[:8]

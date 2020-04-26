@@ -15,24 +15,25 @@ data "terraform_remote_state" "photo_sharing_infra_state" {
 data "aws_caller_identity" "current" {}
 
 #####create archive for lambda function #######
-data "null_data_source" "lambda_file" {
-  inputs = {
-    filename = "${path.module}/src/thumbnail_image.py"
-  }
-}
 
-data "null_data_source" "lambda_archive" {
-  inputs = {
-    filename = "${path.module}/src/thumbnail_image.zip"
+resource "null_resource" "pip" {
+  triggers {
+    main         = "${base64sha256(file("src/main.py"))}"
+    requirements = "${base64sha256(file("src/requirements.txt"))}"
+  }
+
+  provisioner "local-exec" {
+    command = "./pip.sh ${path.module}/src"
   }
 }
 
 data "archive_file" "thumbnail_image" {
   type        = "zip"
-  source_file = data.null_data_source.lambda_file.outputs.filename
-  output_path = data.null_data_source.lambda_archive.outputs.filename
-}
+  source_dir  = "${path.module}/src"
+  output_path = "${path.module}/thumbnail_image.zip"
 
+  depends_on = ["null_resource.pip"]
+}
 
 ###### upload source code to s3 bucket ######
 module  "lambda_source_upload" {

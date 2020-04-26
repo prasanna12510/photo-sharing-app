@@ -4,7 +4,7 @@ resource "aws_api_gateway_method" "api-method" {
   http_method          = var.http_method
   authorization        = var.authorization
   api_key_required     = var.api_key_required
-  request_parameters   = length(var.request_parameters) > 0 ? element(var.request_parameters, count.index) : {}
+  request_parameters   = var.request_parameters
 
   /* request parameter example
   request_parameters = {
@@ -23,7 +23,7 @@ resource "aws_api_gateway_integration" "api-method-integration_lambda_proxy" {
   integration_http_method = var.http_method
   type                    = var.integration_type
   uri                     = "arn:aws:apigateway:${var.region}:lambda:path/2015-03-31/functions/${var.lambda_fuction_arn}/invocations"
-  request_parameters      = length(var.integration_request_parameters) > 0 ? element(var.integration_request_parameters, count.index) : {}
+  request_parameters      = var.integration_request_parameters
   depends_on              = ["aws_api_gateway_method.api-method"]
 }
 
@@ -36,7 +36,7 @@ resource "aws_api_gateway_integration" "api-method-integration_s3_proxy" {
   integration_http_method = var.http_method
   type                    = var.integration_type
   uri                     = "arn:aws:apigateway:${var.region}:s3:path/${var.bucket_name}/{id}/{filename}"
-  request_parameters      = length(var.integration_request_parameters) > 0 ? element(var.integration_request_parameters, count.index) : {}
+  request_parameters      = var.integration_request_parameters
   depends_on              = ["aws_api_gateway_method.api-method"]
 
   /*

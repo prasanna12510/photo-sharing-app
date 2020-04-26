@@ -53,7 +53,7 @@ module "upload_image_lambda" {
   timeout                = var.lambda_timeout
   func_name              = var.lambda_name
   func_handler           = var.lambda_handler_name
-  source_code_hash       = base64sha256(data.archive_file.upload_image[0].output_path)
+  source_code_hash       = base64sha256(data.archive_file.upload_image.output_path)
   description            = var.lambda_function_decsription
   tags                   = local.tags
   environment_variables  = {

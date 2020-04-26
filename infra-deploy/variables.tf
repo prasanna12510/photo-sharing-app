@@ -9,6 +9,11 @@ variable "env" {
   }
 }
 
+variable "azs" {
+  description = "Availability Zones in AWS to be use"
+  default     = ["ap-southeast-1a", "ap-southeast-1b", "ap-southeast-1c"]
+}
+
 variable "service_name" {
   description = "Tag: Service Name for all resources"
   default     = "photo-sharing"

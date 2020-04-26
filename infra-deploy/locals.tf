@@ -23,7 +23,7 @@ locals {
 
   tags = {
     environment  = terraform.workspace
-    version      = var.commit_sha
+    version      = var.tag
     name         = var.service_name
     ManagedBy    = "terraform"
   }

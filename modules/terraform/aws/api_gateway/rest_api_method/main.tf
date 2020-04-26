@@ -57,7 +57,7 @@ resource "aws_api_gateway_integration_response" "ok-integration-response" {
   }
 }
 
-
+/*
 ####By default enable options
 
 #OPTIONS method
@@ -124,7 +124,7 @@ resource "aws_api_gateway_integration" "itemOptionsMethod-ApiProxyIntegration" {
     "application/json" = ""
   }
 }
-
+*/
 
 resource "aws_api_gateway_deployment" "api_deployment" {
   rest_api_id = var.api_id

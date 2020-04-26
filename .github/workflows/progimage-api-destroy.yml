@@ -1,11 +1,9 @@
 name: terraform-delete-progimage-service
 on:
  push:
-   branches:
-     - master
    tags:
      - PROGIMAGE-API-PLAY-DELETE-*
-     
+
 jobs:
   destroy-progimage-resources:
     name: destroy-progimage-aws-resources

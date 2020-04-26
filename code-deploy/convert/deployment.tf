@@ -15,24 +15,25 @@ data "terraform_remote_state" "photo_sharing_infra_state" {
 data "aws_caller_identity" "current" {}
 
 #####create archive for lambda function #######
-data "null_data_source" "lambda_file" {
-  inputs = {
-    filename = "${path.module}/src/convert_image.py"
-  }
-}
 
-data "null_data_source" "lambda_archive" {
-  inputs = {
-    filename = "${path.module}/src/convert_image.zip"
+resource "null_resource" "pip" {
+  triggers {
+    main         = "${base64sha256(file("src/convert_image.py"))}"
+    requirements = "${base64sha256(file("src/requirements.txt"))}"
+  }
+
+  provisioner "local-exec" {
+    command = "./pip.sh ${path.module}/src"
   }
 }
 
 data "archive_file" "convert_image" {
   type        = "zip"
-  source_file = data.null_data_source.lambda_file.outputs.filename
-  output_path = data.null_data_source.lambda_archive.outputs.filename
-}
+  source_dir  = "${path.module}/src"
+  output_path = "${path.module}/convert_image.zip"
 
+  depends_on = ["null_resource.pip"]
+}
 
 ###### upload source code to s3 bucket ######
 module  "lambda_source_upload" {
@@ -79,13 +80,13 @@ module "convert_image_lambda_permission" {
 module  "convert_api_resource" {
   rest_api_id = data.terraform_remote_state.photo_sharing_infra_state.outputs.api_id
   parent_id   = "${aws_api_gateway_rest_api.api.root_resource_id}"
-  path_part   = "convert"
+  path_parts  = ["convert","{id}","{filename}"]
 }
 
 module "convert_image_api_method" {
   source             = "../../modules/terraform/aws/api_gateway/rest_api_method"
   api_id             = data.terraform_remote_state.photo_sharing_infra_state.outputs.api_id
-  integration_type   = "AWS_PROXY"
+  integration_type   = "AWS"
   http_method        = "GET"
   lambda_fuction_arn = module.convert_image_lambda.arn
   api_resource_id    = "${module.convert_api_resource.api_resource_id}"

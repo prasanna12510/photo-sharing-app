@@ -1,48 +1,23 @@
 ####lambda function variables####
-variable "lambda_name" {
-  type        = string
-  description = "lambda function name"
-  default     = "download-image"
+variable "request_parameters" {
+  type = list
+  default = [
+    {
+      "method.request.path.id"       = true
+      "method.request.path.filename" = true
+    }
+  ]
 }
 
-variable "lambda_runtime" {
-  type        = string
-  description = "runtime for lambda"
-  default     = "python3.7"
-}
 
-variable "lambda_function_decsription" {
-  type        = string
-  description = "lambda function description"
-  default     = "Lambda function which downloads image based on image_id"
-}
-
-variable "lambda_handler_name" {
-  type        = string
-  description = "lambda function handler name to download image"
-  default     = "download_image.lambda_handler"
-}
-
-variable "lambda_timeout" {
-  type        = number
-  default     = 30
-}
-
-variable "lambda_log_events" {
-  type        = bool
-  description = "log events for lambda function"
-  default     = true
-}
-
-#####lambda function variables#####
-variable "lambda_permission" {
-  type = map
-
-  default = {
-    "statement_id" = "AllowExecutionFromApiGateway"
-    "action"       = "lambda:InvokeFunction"
-    "principal"    = "apigateway.amazonaws.com"
-  }
+variable "integration_request_parameters" {
+  type = list
+  default = [
+    {
+      "integration.request.path.id"       = "method.request.path.id"
+      "integration.request.path.filename" = "method.request.path.filename"
+    }
+  ]
 }
 
 variable "region" {

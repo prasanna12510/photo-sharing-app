@@ -18,7 +18,7 @@ data "aws_caller_identity" "current" {}
 
 resource "null_resource" "pip" {
   triggers {
-    main         = "${base64sha256(file("src/main.py"))}"
+    main         = "${base64sha256(file("src/thumbnail_image.py"))}"
     requirements = "${base64sha256(file("src/requirements.txt"))}"
   }
 
@@ -61,6 +61,7 @@ module "thumbnail_image_lambda" {
     ENVIRONMENT    = terraform.workspace
     LOG_EVENTS     = var.lambda_log_events
     BUCKET_NAME    = data.terraform_remote_state.photo_sharing_infra_state.outputs.image_storage_s3_bucket_name
+    AWS_REGION     = var.region
   }
 }
 
@@ -80,17 +81,19 @@ module "thumbnail_image_lambda_permission" {
 module  "thumbnail_api_resource" {
   rest_api_id = data.terraform_remote_state.photo_sharing_infra_state.outputs.api_id
   parent_id   = "${aws_api_gateway_rest_api.api.root_resource_id}"
-  path_part   = "thumbnail"
+  path_parts  = ["thumbnail","{id}","{filename}"]
 }
 
 module "thumbnail_image_api_method" {
-  source             = "../../modules/terraform/aws/api_gateway/rest_api_method"
-  api_id             = data.terraform_remote_state.photo_sharing_infra_state.outputs.api_id
-  integration_type   = "AWS"
-  http_method        = "POST"
-  lambda_fuction_arn = module.thumbnail_image_lambda.arn
-  api_resource_id    = "${module.thumbnail_api_resource.api_resource_id}"
-  api_resource_path  = "${module.thumbnail_api_resource.api_resource_path}"
+  source                          = "../../modules/terraform/aws/api_gateway/rest_api_method"
+  api_id                          = data.terraform_remote_state.photo_sharing_infra_state.outputs.api_id
+  integration_type                = "AWS"
+  http_method                     = "GET"
+  lambda_fuction_arn              = module.thumbnail_image_lambda.arn
+  api_resource_id                 = "${module.thumbnail_api_resource.api_resource_id}"
+  api_resource_path               = "${module.thumbnail_api_resource.api_resource_path}"
+  request_parameters              = var.request_parameters
+  integration_request_parameters  = var.integration_request_parameters
 }
 
 

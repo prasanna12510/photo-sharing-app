@@ -32,6 +32,7 @@ variable "assume_role_principle" {
 
   default = {
     "lambda"  = ["lambda.amazonaws.com"]
+    "apigw"   = ["apigateway.amazonaws.com"]
   }
 }
 
@@ -86,6 +87,13 @@ variable "custom_policy_resources" {
     "lambda_sts"        = ["*"]
     "lambda_ssm"        = ["*"]
   }
+}
+
+variable "aws_iam_managed_policy_arns" {
+  type = "list"
+  default = [
+    "arn:aws:iam::aws:policy/AmazonAPIGatewayInvokeFullAccess"
+  ]
 }
 
 #security_group variables

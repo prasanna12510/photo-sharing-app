@@ -79,7 +79,7 @@ module "upload_image_lambda_permission" {
 module  "upload_api_resource" {
   rest_api_id = data.terraform_remote_state.photo_sharing_infra_state.outputs.api_id
   parent_id   = "${aws_api_gateway_rest_api.api.root_resource_id}"
-  path_part   = "upload"
+  path_parts  = ["upload"]
 }
 
 module "upload_image_api_method" {

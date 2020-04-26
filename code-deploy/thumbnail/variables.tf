@@ -1,3 +1,28 @@
+
+####apigw integration variables####
+variable "request_parameters" {
+  type = list
+  default = [
+    {
+      "method.request.path.id"          = true
+      "method.request.path.filename"    = true
+      "method.request.querystring.size" = true
+    }
+  ]
+}
+
+
+variable "integration_request_parameters" {
+  type = list
+  default = [
+    {
+      "integration.request.path.id"          = "method.request.path.id"
+      "integration.request.path.filename"    = "method.request.path.filename"
+      "integration.request.querystring.size" = "method.request.querystring.size"
+    }
+  ]
+}
+
 ####lambda function variables####
 variable "lambda_name" {
   type        = string
@@ -34,7 +59,6 @@ variable "lambda_log_events" {
   default     = true
 }
 
-#####lambda function variables#####
 variable "lambda_permission" {
   type = map
 

@@ -79,6 +79,12 @@ variable "custom_policy_actions" {
       "sts:DecodeAuthorizationMessage"
     ]
 
+    "s3" = [
+      "s3:PutObject",
+      "s3:GetObject",
+      "s3:List*"
+    ]
+
   }
 }
 
@@ -95,7 +101,7 @@ variable "custom_policy_resources" {
 }
 
 variable "aws_iam_managed_policy_arns" {
-  type = "list"
+  type = list
   default = [
     "arn:aws:iam::aws:policy/AmazonAPIGatewayInvokeFullAccess"
   ]

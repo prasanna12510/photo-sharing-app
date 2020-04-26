@@ -26,24 +26,7 @@ module "image_storage_s3_bucket" {
   s3_tags = {
     Name = local.image_storage_bucket_name
   }
-
-  policy = <<EOF
-{
-  "Version": "2012-10-17",
-  "Statement": [
-    {
-      "Action": [
-                "s3:PutObject",
-                "s3:GetObject"
-            ],
-      "Effect": "Allow",
-      "Resource": [
-                "arn:aws:s3:::${local.image_storage_bucket_name}/*"
-            ]
-    }
-  ]
-}
-EOF
+  policy = data.aws_iam_policy_document.s3_policy.json
 }
 
 output "lambda_source_code_s3_bucket_name" {

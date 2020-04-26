@@ -1,6 +1,10 @@
 resource aws_api_gateway_domain_name domain {
   domain_name     = var.domain_name
-  certificate_arn = var.certificate_arn
+  regional_certificate_arn = var.certificate_arn
+
+  endpoint_configuration {
+      types = ["REGIONAL"]
+  }
 }
 
 resource aws_api_gateway_base_path_mapping base_path {

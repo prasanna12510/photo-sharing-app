@@ -15,9 +15,6 @@ jobs:
       - name: Checkout public repo
         uses: actions/checkout@master
 
-      - name: Install botocore and boto3
-        run: pip install botocore boto3
-
       - name: Get the latest terraform version
         run: make terraform-install
 

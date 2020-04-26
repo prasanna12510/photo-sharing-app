@@ -103,7 +103,7 @@ output "upload_image_lambda_arn" {
 }
 
 output "upload_image_api_method_id" {
-  value = module.upload_image_api_method.id
+  value = module.upload_image_api_method.http_method_id
 }
 
 output "upload_image_api_invoke_url" {

@@ -43,7 +43,7 @@ module  "lambda_source_upload" {
 
 ################lambda for upload images#########
 module "upload_image_lambda" {
-  source                 = "../../modules/terraform/aws/lambda/function"
+  source                 = "../modules/terraform/aws/lambda/function"
   vpc_subnet_ids         = local.private_subnet_ids
   vpc_security_group_ids = [local.lambda_security_group_id]
   iam_role_arn           = data.terraform_remote_state.photo_sharing_infra_state.outputs.lambda_role_arn
@@ -65,7 +65,7 @@ module "upload_image_lambda" {
 
 #########################api gateway integration with lambda##################################
 module "upload_image_lambda_permission" {
-  source        = "../../modules/terraform/aws/lambda/permission"
+  source        = "../modules/terraform/aws/lambda/permission"
   create        = true
   statement_id  = var.lambda_permission.statement_id
   action        = var.lambda_permission.action
@@ -83,7 +83,7 @@ module  "upload_api_resource" {
 }
 
 module "upload_image_api_method" {
-  source             = "../../modules/terraform/aws/api_gateway/rest_api_method"
+  source             = "../modules/terraform/aws/api_gateway/rest_api_method"
   api_id             = data.terraform_remote_state.photo_sharing_infra_state.outputs.api_id
   integration_type   = "AWS"
   http_method        = "POST"
@@ -95,7 +95,7 @@ module "upload_image_api_method" {
 
 # deploy api
 module  "upload_image_api_deployment" {
-  source             = "../../modules/terraform/aws/api_gateway/rest_api_deployment"
+  source             = "../modules/terraform/aws/api_gateway/rest_api_deployment"
   api_id             = data.terraform_remote_state.photo_sharing_infra_state.outputs.api_id
   stage_name         = "development"
   description        = "Deploy methods: ${module.upload_image_api_method.http_method}"

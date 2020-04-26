@@ -1,6 +1,7 @@
 import json
 import boto3
 import base64
+import uuid
 
 import logging
 
@@ -26,6 +27,6 @@ def lambda_handler(event, context):
         }
     else:
         return {
-        'statusCode' : 405
+        'statusCode' : 405,
         'body' : 'method not supported'
         }

@@ -1,8 +1,8 @@
 
 variable "api_name" {
-  type = "string"
+  type = string
 }
 
 variable "api_description" {
-  type = "string"
+  type = string
 }

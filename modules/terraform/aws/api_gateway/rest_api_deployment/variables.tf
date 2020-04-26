@@ -1,13 +1,13 @@
 variable "api_id" {
-  type = "string"
+  type = string
 }
 
 variable "stage_name" {
-  type = "string"
+  type = string
   default = "dev"
 }
 
 variable "description" {
-  type = "string"
+  type = string
   default = "Deployed Image sharing api"
 }

@@ -8,10 +8,13 @@ import logging
 
 s3 = boto3.client('s3')
 
+logger = logging.getLogger()
+logger.setLevel(logging.INFO)
+
 def lambda_handler(event, context):
 
-    if 'LOG_EVENTS' in os.environ and os.environ['LOG_EVENTS'] == 'True':
-        logging.warning('Event logging enabled: `{}`'.format(json.dumps(event)))
+    if 'LOG_EVENTS' in os.environ and os.environ['LOG_EVENTS'] == 'true':
+        logger.info('Event logging enabled: `{}`'.format(json.dumps(event)))
 
     if event['httpMethod'] == 'POST' :
         data = json.loads(event['body'])

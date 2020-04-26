@@ -1,3 +1,4 @@
+#retrieve the zone_id
 data "aws_route53_zone" "dns_zone" {
   name         = "${var.hosted_zone_name}." # Notice the dot!!!
   private_zone = false

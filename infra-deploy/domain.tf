@@ -4,7 +4,7 @@ data "aws_route53_zone" "dns_zone" {
 }
 
 module "photo_sharing_api_gateway_domain" {
-  source          = "../modules/terraform/api_gateway/rest_api_domain"
+  source          = "../modules/terraform/aws/api_gateway/rest_api_domain"
   api_id          = module.photo_sharing_api.id
   api_stage_name  = "dev"
   domain_name     = "progimage.mywebapplication.ml"

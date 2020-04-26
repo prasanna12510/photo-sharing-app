@@ -133,12 +133,9 @@ variable "all_ips" {
 variable "api_name" {
   default = "image_box"
 }
+
 variable "api_description" {
   default = "Image box to store, retrieve and transform images "
-}
-
-variable "binary_media_types" {
-  default = ["*/*"]
 }
 
 variable "region" {

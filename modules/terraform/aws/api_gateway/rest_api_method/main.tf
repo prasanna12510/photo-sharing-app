@@ -53,7 +53,7 @@ resource "aws_api_gateway_method_response" "ok" {
   rest_api_id = var.api_id
   resource_id = var.api_resource_id
   http_method = aws_api_gateway_method.api-method.http_method
-  status_code = "200"
+  status_code = 200
 
   response_models {
     "application/json" = "Empty"
@@ -68,10 +68,10 @@ resource "aws_api_gateway_method_response" "ok" {
 
 resource "aws_api_gateway_integration_response" "ok-integration-response" {
   depends_on  = ["aws_api_gateway_method_response.ok", "aws_api_gateway_method.api-method", "aws_api_gateway_integration.api-method-integration"]
-  rest_api_id = "${var.api_id}"
-  resource_id = "${var.api_resource_id}"
-  http_method = "${aws_api_gateway_method.api-method.http_method}"
-  status_code = "${aws_api_gateway_method_response.ok.status_code}"
+  rest_api_id = var.api_id
+  resource_id = var.api_resource_id
+  http_method = aws_api_gateway_method.api-method.http_method
+  status_code = aws_api_gateway_method_response.ok.status_code
 
   response_templates = {
     "application/json" = ""

@@ -5,51 +5,23 @@ resource "aws_api_gateway_method" "api-method" {
   authorization        = var.authorization
   api_key_required     = var.api_key_required
   request_parameters   = var.request_parameters
-
-  /* request parameter example
-  request_parameters = {
-  "method.request.path.bucket" = true
-  "method.request.path.folder" = true
-  "method.request.path.item"   = true
-  }*/
 }
 
-resource "aws_api_gateway_integration" "api-method-integration_lambda_proxy" {
-
-  count                   = var.lambda_proxy ? 1 : 0
+resource "aws_api_gateway_integration" "api-method-integration_proxy" {
+  
   rest_api_id             = var.api_id
   resource_id             = var.api_resource_id
   http_method             = aws_api_gateway_method.api-method.http_method
   integration_http_method = var.http_method
   type                    = var.integration_type
-  uri                     = "arn:aws:apigateway:${var.region}:lambda:path/2015-03-31/functions/${var.lambda_fuction_arn}/invocations"
+  uri                     = var.lambda_proxy ? "arn:aws:apigateway:${var.region}:lambda:path/2015-03-31/functions/${var.lambda_fuction_arn}/invocations" :  "arn:aws:apigateway:${var.region}:s3:path/${var.bucket_name}/{id}/{filename}"
   request_parameters      = var.integration_request_parameters
-  depends_on              = ["aws_api_gateway_method.api-method"]
+  depends_on              = [aws_api_gateway_method.api-method]
 }
 
-
-resource "aws_api_gateway_integration" "api-method-integration_s3_proxy" {
-  count                   = var.lambda_proxy ? 0 : 1
-  rest_api_id             = var.api_id
-  resource_id             = var.api_resource_id
-  http_method             = aws_api_gateway_method.api-method.http_method
-  integration_http_method = var.http_method
-  type                    = var.integration_type
-  uri                     = "arn:aws:apigateway:${var.region}:s3:path/${var.bucket_name}/{id}/{filename}"
-  request_parameters      = var.integration_request_parameters
-  depends_on              = ["aws_api_gateway_method.api-method"]
-
-  /*
-  request_parameters {
-  "integration.request.path.folder" = "method.request.path.folder"
-  "integration.request.path.item"   = "method.request.path.item"
-  "integration.request.path.bucket" = "method.request.path.bucket"
-}
-  */
-}
 
 resource "aws_api_gateway_method_response" "ok" {
-  depends_on  = var.lambda_proxy ? ["aws_api_gateway_method.api-method", "aws_api_gateway_integration.api-method-integration_lambda_proxy"]:["aws_api_gateway_method.api-method", "aws_api_gateway_integration.api-method-integration_s3_proxy"]
+  depends_on  = [aws_api_gateway_method.api-method, aws_api_gateway_integration.api-method-integration_proxy]
   rest_api_id = var.api_id
   resource_id = var.api_resource_id
   http_method = aws_api_gateway_method.api-method.http_method
@@ -67,7 +39,7 @@ resource "aws_api_gateway_method_response" "ok" {
 }
 
 resource "aws_api_gateway_integration_response" "ok-integration-response" {
-  depends_on  = var.lambda_proxy ? ["aws_api_gateway_method_response.ok", "aws_api_gateway_method.api-method", "aws_api_gateway_integration.api-method-integration_lambda_proxy"]:["aws_api_gateway_method_response.ok", "aws_api_gateway_method.api-method", "aws_api_gateway_integration.api-method-integration_s3_proxy"]
+  depends_on  = [aws_api_gateway_method_response.ok, aws_api_gateway_method.api-method, aws_api_gateway_integration.api-method-integration_proxy]
   rest_api_id = var.api_id
   resource_id = var.api_resource_id
   http_method = aws_api_gateway_method.api-method.http_method

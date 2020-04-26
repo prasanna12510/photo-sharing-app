@@ -15,6 +15,17 @@ variable "http_method" {
   type = string
 }
 
+variable "stage_name" {
+  type = string
+  default = "dev"
+}
+
+variable "description" {
+  type = string
+  default = "Deployed Image sharing api"
+}
+
+
 variable "authorization" {
   type = string
   default = "NONE"

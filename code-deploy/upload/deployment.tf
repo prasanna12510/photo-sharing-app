@@ -87,21 +87,15 @@ module "upload_image_api_method" {
   source             = "../../modules/terraform/aws/api_gateway/rest_api_method"
   lambda_proxy       = true
   api_id             = data.terraform_remote_state.photo_sharing_infra_state.outputs.api_id
-  integration_type   = "AWS"
+  integration_type   = "AWS_PROXY"
   http_method        = "POST"
   lambda_fuction_arn = module.upload_image_lambda.arn
   api_resource_id    = module.upload_api_resource.resource_id
   api_resource_path  = module.upload_api_resource.resource_path
-}
-
-
-# deploy api
-module  "upload_image_api_deployment" {
-  source             = "../../modules/terraform/aws/api_gateway/rest_api_deployment"
-  api_id             = data.terraform_remote_state.photo_sharing_infra_state.outputs.api_id
   stage_name         = "dev"
   description        = "Deploy methods: ${module.upload_image_api_method.http_method}"
 }
+
 ########################outputs###########################
 
 output "upload_image_lambda_arn" {
@@ -113,9 +107,9 @@ output "upload_image_api_method_id" {
 }
 
 output "upload_image_api_invoke_url" {
-  value = module.upload_image_api_deployment.invoke_url
+  value = module.upload_image_api_method.invoke_url
 }
 
 output "apigw_execution_arn" {
-  value = module.upload_image_api_deployment.execution_arn
+  value = module.upload_image_api_method.execution_arn
 }

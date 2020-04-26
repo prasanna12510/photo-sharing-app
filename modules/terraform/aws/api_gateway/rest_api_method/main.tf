@@ -8,7 +8,7 @@ resource "aws_api_gateway_method" "api-method" {
 }
 
 resource "aws_api_gateway_integration" "api-method-integration_proxy" {
-  
+
   rest_api_id             = var.api_id
   resource_id             = var.api_resource_id
   http_method             = aws_api_gateway_method.api-method.http_method
@@ -54,4 +54,15 @@ resource "aws_api_gateway_integration_response" "ok-integration-response" {
     "method.response.header.Access-Control-Allow-Methods" = "'${aws_api_gateway_method.api-method.http_method}'"
     "method.response.header.Access-Control-Allow-Origin" = "'*'"
   }
+}
+
+
+resource "aws_api_gateway_deployment" "api_deployment" {
+  rest_api_id = var.api_id
+  stage_name  = var.stage_name
+  description = var.description
+
+  depends_on = [
+    aws_api_gateway_integration.api-method-integration_proxy
+  ]
 }

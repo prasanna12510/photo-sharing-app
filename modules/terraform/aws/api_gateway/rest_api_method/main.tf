@@ -79,7 +79,7 @@ resource "aws_api_gateway_method_response" "itemOptionsMethod200Response" {
   http_method = aws_api_gateway_method.itemOptionsMethod.http_method
   status_code = "200"
 
-  response_models ={
+  response_models = {
     "application/json" = "Empty"
   }
 
@@ -105,7 +105,7 @@ resource "aws_api_gateway_integration_response" "itemOptionsMethod-IntegrationRe
     "method.response.header.Access-Control-Allow-Origin"  = "'*'"
   }
 
-  response_templates ={
+  response_templates = {
     "application/json" = ""
   }
 
@@ -120,7 +120,7 @@ resource "aws_api_gateway_integration" "itemOptionsMethod-ApiProxyIntegration" {
   type        = "MOCK"
   depends_on  = [aws_api_gateway_method.itemOptionsMethod]
 
-  request_templates ={
+  request_templates = {
     "application/json" = <<EOF
         {
         "statusCode" : 200
@@ -136,6 +136,7 @@ resource "aws_api_gateway_deployment" "api_deployment" {
   description = var.description
 
   depends_on = [
-    aws_api_gateway_integration.api-method-integration_proxy
+    aws_api_gateway_integration.api-method-integration_proxy,
+    aws_api_gateway_integration.itemOptionsMethod-ApiProxyIntegration
   ]
 }

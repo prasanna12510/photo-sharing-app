@@ -12,9 +12,10 @@ data "terraform_remote_state" "photo_sharing_generic_state" {
 
 
 module "photo_sharing_api" {
-  source          = "../modules/terraform/aws/api_gateway/rest_api"
-  api_name        = var.api_name
-  api_description = var.api_description
+  source              = "../modules/terraform/aws/api_gateway/rest_api"
+  api_name            = var.api_name
+  binary_media_types  = var.binary_media_types
+  api_description     = var.api_description
 }
 
 

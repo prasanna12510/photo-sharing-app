@@ -136,6 +136,11 @@ variable "api_name" {
 variable "api_description" {
   default = "Image box to store, retrieve and transform images "
 }
+
+variable "binary_media_types" {
+  default = ["*/*"]
+}
+
 variable "region" {
   default = "ap-southeast-1"
 }

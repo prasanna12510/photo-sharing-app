@@ -17,13 +17,9 @@ def lambda_handler(event, context):
         logger.info('Event logging enabled: `{}`'.format(json.dumps(event)))
 
     if event['httpMethod'] == 'POST' :
-        data = json.loads(event['body'])
-        image_name= data['name']
         image_id = str(uuid.uuid4())[:8]
-        image = data['file']
-        image = image[image.find(",")+1:]
-        dec = base64.b64decode(image + "===")
-        s3.put_object(Bucket=os.environ["BUCKET_NAME"], Key=image_id/image_name, Body=dec)
+        dec = base64.b64decode(event['body'])
+        s3.put_object(Bucket=os.environ["BUCKET_NAME"], Key='image_id.jpeg', Body=dec)
         return {
         'statusCode': 200,
         'body': json.dumps({'image_id': image_id}),

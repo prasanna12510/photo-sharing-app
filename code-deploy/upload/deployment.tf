@@ -77,6 +77,7 @@ module "upload_image_lambda_permission" {
 
 ########api gateway method integration with lambda#######
 module  "upload_api_resource" {
+  source      = "../modules/terraform/aws/api_gateway/rest_api_resource"
   rest_api_id = data.terraform_remote_state.photo_sharing_infra_state.outputs.api_id
   parent_id   = "${aws_api_gateway_rest_api.api.root_resource_id}"
   path_parts  = ["upload"]

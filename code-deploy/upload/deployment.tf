@@ -96,6 +96,17 @@ module "upload_image_api_method" {
   description        = "Deploy methods: ${module.upload_image_api_method.http_method}"
 }
 
+module "method_options" {
+  source             = "birkoff/api-method-mock/aws"
+  region             = "${var.region}"
+  api_id             = "${module.my_api.id}"
+  http_method        = "OPTIONS"
+  api_resource_id    = "${module.my_api.resource_id}"
+  authorization      = "NONE"
+  api_resource_path  = "${module.my_api.resource_path}"
+  allow_methods      = "'POST,OPTIONS'"
+}
+
 ########################outputs###########################
 
 output "upload_image_lambda_arn" {

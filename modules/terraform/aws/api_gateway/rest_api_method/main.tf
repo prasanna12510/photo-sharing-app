@@ -1,9 +1,9 @@
 resource "aws_api_gateway_method" "api-method" {
-  rest_api_id          = "${var.api_id}"
-  resource_id          = "${var.api_resource_id}"
-  http_method          = "${var.http_method}"
-  authorization        = "${var.authorization}"
-  api_key_required     = "${var.api_key_required}"
+  rest_api_id          = var.api_id
+  resource_id          = var.api_resource_id
+  http_method          = var.http_method
+  authorization        = var.authorization
+  api_key_required     = var.api_key_required
   request_parameters   = length(var.request_parameters) > 0 ? element(var.request_parameters, count.index) : {}
 
   /* request parameter example
@@ -50,9 +50,9 @@ resource "aws_api_gateway_integration" "api-method-integration_s3_proxy" {
 
 resource "aws_api_gateway_method_response" "ok" {
   depends_on  = ["aws_api_gateway_method.api-method", "aws_api_gateway_integration.api-method-integration"]
-  rest_api_id = "${var.api_id}"
-  resource_id = "${var.api_resource_id}"
-  http_method = "${aws_api_gateway_method.api-method.http_method}"
+  rest_api_id = var.api_id
+  resource_id = var.api_resource_id
+  http_method = aws_api_gateway_method.api-method.http_method
   status_code = "200"
 
   response_models {

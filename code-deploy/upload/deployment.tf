@@ -79,7 +79,7 @@ module "upload_image_lambda_permission" {
 module  "upload_api_resource" {
   source      = "../../modules/terraform/aws/api_gateway/rest_api_resource"
   rest_api_id = data.terraform_remote_state.photo_sharing_infra_state.outputs.api_id
-  parent_id   = "${aws_api_gateway_rest_api.api.root_resource_id}"
+  parent_id   = data.terraform_remote_state.photo_sharing_infra_state.outputs.root_resource_id
   path_parts  = ["upload"]
 }
 
@@ -98,7 +98,7 @@ module "upload_image_api_method" {
 module  "upload_image_api_deployment" {
   source             = "../../modules/terraform/aws/api_gateway/rest_api_deployment"
   api_id             = data.terraform_remote_state.photo_sharing_infra_state.outputs.api_id
-  stage_name         = "development"
+  stage_name         = "dev"
   description        = "Deploy methods: ${module.upload_image_api_method.http_method}"
 }
 ########################outputs###########################

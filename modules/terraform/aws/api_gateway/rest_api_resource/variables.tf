@@ -1,9 +1,9 @@
 variable "api_id" {
-  type = "string"
+  type = string
 }
 
 variable "api_root_resource_id" {
-  type = "string"
+  type = string
 }
 
 variable "path_parts" {

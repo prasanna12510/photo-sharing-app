@@ -6,7 +6,7 @@ data "terraform_remote_state" "photo_sharing_infra_state" {
     organization = "terracloud-utility"
     token        = "TF_CLOUD_TOKEN"
     workspaces = {
-      name = "photo-sharing-infra-${terraform.workspace}"
+      name = "photo-sharing-service-infra-${terraform.workspace}"
     }
   }
 }

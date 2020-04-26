@@ -33,6 +33,11 @@ data "aws_iam_policy_document" "s3_policy" {
     effect    = "Allow"
     resources = ["arn:aws:s3:::${local.image_storage_bucket_name}/*"]
     actions   = var.custom_policy_actions.s3
+
+    principals {
+      type        = "Service"
+      identifiers = var.assume_role_principle.apigw
+    }
   }
 }
 

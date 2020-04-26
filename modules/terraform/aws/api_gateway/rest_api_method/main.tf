@@ -121,11 +121,7 @@ resource "aws_api_gateway_integration" "itemOptionsMethod-ApiProxyIntegration" {
   depends_on  = [aws_api_gateway_method.itemOptionsMethod]
 
   request_templates = {
-    "application/json" = <<EOF
-        {
-        "statusCode" : 200
-        }
-EOF
+    "application/json" = ""
   }
 }
 

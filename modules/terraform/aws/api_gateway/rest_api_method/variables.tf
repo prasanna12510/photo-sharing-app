@@ -56,3 +56,8 @@ variable "lambda_proxy" {
   type = bool
   default = true
 }
+
+variable "region" {
+  type    = string
+  default = "ap-southeast-1"
+}

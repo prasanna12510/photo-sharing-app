@@ -1,5 +1,5 @@
 module "vpc" {
-  source               = "../../modules/terraform/aws/network/vpc"
+  source               = "../modules/terraform/aws/network/vpc"
   enable_dns_hostnames = "true"
   enable_dns_support   = "true"
   instance_tenancy     = "default"
@@ -10,7 +10,7 @@ module "vpc" {
 }
 #creating subnets
 module "public_subnets" {
-  source       = "../../modules/terraform/aws/network/subnets"
+  source       = "../modules/terraform/aws/network/subnets"
   azs          = var.azs
   vpc_id       = module.vpc.vpc_id
   subnets_cidr = local.public_subnets
@@ -19,7 +19,7 @@ module "public_subnets" {
 }
 
 module "private_subnets" {
-  source       = "../../modules/terraform/aws/network/subnets"
+  source       = "../modules/terraform/aws/network/subnets"
   azs          = var.azs
   vpc_id       = module.vpc.vpc_id
   subnets_cidr = local.private_subnets
@@ -29,7 +29,7 @@ module "private_subnets" {
 
 #creating natgw and route_table
 module "natgw" {
-  source            = "../../modules/terraform/aws/network/nat_gateway"
+  source            = "../modules/terraform/aws/network/nat_gateway"
   public_subnet_ids = module.public_subnets.subnet_ids.*
   name              = "${local.name}-nat-gateway"
   tags              = local.tags
@@ -38,7 +38,7 @@ module "natgw" {
 
 #creating public_route and attaching nat_gateway to public_subnet
 module "public_route" {
-  source     = "../../modules/terraform/aws/network/route_table/external"
+  source     = "../modules/terraform/aws/network/route_table/external"
   azs        = var.azs
   vpc_id     = module.vpc.vpc_id
   name       = "${local.name}-route-public"
@@ -49,7 +49,7 @@ module "public_route" {
 }
 
 module "private_route" {
-  source            = "../../modules/terraform/aws/network/route_table/internal"
+  source            = "../modules/terraform/aws/network/route_table/internal"
   azs               = var.azs
   vpc_id            = module.vpc.vpc_id
   name              = "${local.name}-route-private"
@@ -62,7 +62,7 @@ module "private_route" {
 }
 
 module "gateway_vpc_s3_endpoints" {
-  source                = "../../modules/terraform/aws/network/vpcendpoints/gateway_endpoint"
+  source                = "../modules/terraform/aws/network/vpcendpoints/gateway_endpoint"
   azs                   = var.azs
   vpc_id                = module.vpc.vpc_id
   name                  = "${local.name}-s3-vpc-endpoint"

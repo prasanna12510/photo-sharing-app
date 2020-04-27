@@ -17,11 +17,26 @@ data "aws_caller_identity" "current" {}
 
 
 ########api gateway method integration with lambda#######
+#/download/{id}/{filename}
 module  "download_api_resource" {
   source                 = "../../modules/terraform/aws/api_gateway/rest_api_resource"
   api_id                 = data.terraform_remote_state.photo_sharing_infra_state.outputs.api_id
   api_root_resource_id   = data.terraform_remote_state.photo_sharing_infra_state.outputs.api_root_resource_id
-  path_parts             = ["download/{id}/{filename}"]
+  path_part              = "download"
+}
+
+module  "download_api_resource_download_id" {
+  source                 = "../../modules/terraform/aws/api_gateway/rest_api_resource"
+  api_id                 = data.terraform_remote_state.photo_sharing_infra_state.outputs.api_id
+  api_root_resource_id   = module.download_api_resource.resource_id
+  path_part              = "{id}"
+}
+
+module  "download_api_resource_download_filename" {
+  source                 = "../../modules/terraform/aws/api_gateway/rest_api_resource"
+  api_id                 = data.terraform_remote_state.photo_sharing_infra_state.outputs.api_id
+  api_root_resource_id   = module.download_api_resource.download_api_resource_download_id
+  path_part              = "{filename}"
 }
 
 module "download_image_api_method" {

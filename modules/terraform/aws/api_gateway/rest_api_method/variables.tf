@@ -58,6 +58,12 @@ variable "integration_type" {
   type = string
 }
 
+variable "credentials" {
+  type        = string
+  default     = ""
+  description = "The credentials required for the integration. For AWS integrations, 2 options are available. To specify an IAM Role for Amazon API Gateway to assume, use the role's ARN. To require that the caller's identity be passed through from the request, specify the string arn:aws:iam::*:user/*."
+}
+
 
 variable "passthrough_behavior" {
   type = string

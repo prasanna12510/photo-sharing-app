@@ -45,6 +45,6 @@ output "api_gateway_role_name" {
   value = module.api_gateway_role.role_name
 }
 
-output "api-_gateway_role_arn" {
+output "api_gateway_role_arn" {
   value = module.api_gateway_role.role_arn
 }

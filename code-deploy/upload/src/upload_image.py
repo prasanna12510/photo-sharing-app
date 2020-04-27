@@ -33,11 +33,11 @@ def lambda_handler(event, context):
         object_key = '{image}.{type}'.format(image=image_id,type=image_type)
 
         #open the image
-        img = Image.open(io.BytesIO(body.encode()))
+        #img = Image.open(io.BytesIO(body.encode()))
         #convert to bytes
         img_bytes = io.BytesIO()
         #save image to content-type format
-        img.save(img_bytes, format=img.format)
+        img.save(img_bytes, format=image_type.upper())
         #seek to first position
         img_bytes.seek(0)
 

@@ -43,19 +43,18 @@ jobs:
   progimage-upload-api-deployment:
     name: Deploy upload image-api
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        python-version: [3.7]
+
     steps:
       - name: checkout public repo
         uses: actions/checkout@v2
         with:
           fetch-depth: 100
 
-      - name: Set up Python ${{ matrix.python-version }}
+      - name: Set up Python 3.7
         uses: actions/setup-python@v1
         with:
-          python-version: ${{ matrix.python-version }}
+          python-version: '3.7.7' # Semantic version range syntax or exact version of a Python version
+          architecture: 'x64'
 
       - uses: marceloprado/has-changed-path@master
         id: changed-code-deploy-upload

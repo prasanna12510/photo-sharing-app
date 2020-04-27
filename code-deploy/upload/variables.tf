@@ -12,7 +12,7 @@ variable "request_parameters" {
 variable "integration_request_parameters" {
   type = map
   default ={
-    "integration.request.header.Accept"       = "'*/*'"
+    "integration.request.header.Accept"       = "'image/webp,image/*,*/*'"
     "integration.request.header.Content-Type" = "method.request.header.Content-Type"
 
     }

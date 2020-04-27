@@ -4,7 +4,7 @@ variable "request_parameters" {
   type = map
   default =
     {
-      "method.request.header.Content-Type" = false
+      "method.request.header.Content-Type" = "true"
     }
 
 }

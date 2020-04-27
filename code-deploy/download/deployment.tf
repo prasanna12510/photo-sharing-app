@@ -50,6 +50,7 @@ module "download_image_api_method" {
   api_resource_path               = module.download_api_resource.resource_path
   request_parameters              = var.request_parameters
   integration_request_parameters  = var.integration_request_parameters
+  credentials                     = data.terraform_remote_state.photo_sharing_infra_state.outputs.api_gateway_role_arn
   stage_name                      = "dev"
   description                     = "Deploy methods: ${module.download_image_api_method.http_method}"
 }

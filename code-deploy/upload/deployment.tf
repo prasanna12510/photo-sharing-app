@@ -97,7 +97,7 @@ module "upload_image_api_method" {
   integration_request_parameters  = var.integration_request_parameters
   passthrough_behavior = "WHEN_NO_TEMPLATES"
   request_templates = {
-  "application/json" =  <<REQUEST_TEMPLATE
+  "image/jpeg" =  <<REQUEST_TEMPLATE
   {
     "content" : "$util.base64Encode($input.body)"
   }

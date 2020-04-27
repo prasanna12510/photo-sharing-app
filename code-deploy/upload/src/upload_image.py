@@ -19,7 +19,7 @@ def lambda_handler(event, context):
     if event['httpMethod'] == 'POST' :
         image_id = str(uuid.uuid4())[:8]
         body = event['body']
-        content_type = event.headers['content-type']
+        content_type = event["headers"]["content-type"]
         image_type =  content_type.split('/')[1]
         logger.info('content-type: `{}`'.format(content_type))
         object_key = '{image_id}.{image_type}'.format(image_id=image_id,type=image_type)

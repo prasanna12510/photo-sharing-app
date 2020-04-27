@@ -34,7 +34,7 @@ data "archive_file" "upload_image" {
 }*/
 
 resource "null_resource" "pip" {
-  triggers {
+  triggers = {
     main         = "${base64sha256(file("src/upload_image.py"))}"
     requirements = "${base64sha256(file("src/requirements.txt"))}"
   }

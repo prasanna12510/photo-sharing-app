@@ -36,7 +36,7 @@ module "download_image_api_method" {
   request_parameters              = var.request_parameters
   integration_request_parameters  = var.integration_request_parameters
   stage_name                      = "dev"
-  description                     = "Deploy methods: ${module.upload_image_api_method.http_method}"
+  description                     = "Deploy methods: ${module.download_image_api_method.http_method}"
 }
 
 ########################outputs###########################

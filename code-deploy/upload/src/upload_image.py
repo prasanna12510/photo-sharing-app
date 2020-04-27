@@ -20,6 +20,7 @@ logger.setLevel(logging.INFO)
 #                       Key=key,
 #                       Body=out_img)
 
+
 def lambda_handler(event, context):
 
     if 'LOG_EVENTS' in os.environ and os.environ['LOG_EVENTS'] == 'true':

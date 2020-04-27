@@ -35,7 +35,7 @@ module  "download_api_resource_download_id" {
 module  "download_api_resource_download_filename" {
   source                 = "../../modules/terraform/aws/api_gateway/rest_api_resource"
   api_id                 = data.terraform_remote_state.photo_sharing_infra_state.outputs.api_id
-  api_root_resource_id   = module.download_api_resource.download_api_resource_download_id
+  api_root_resource_id   = module.download_api_resource_download_id.resource_id
   path_part              = "{filename}"
 }
 

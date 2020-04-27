@@ -76,7 +76,7 @@ module "upload_image_lambda_permission" {
   source_arn    = local.apigw_source_arn
 }
 
-#########api gateway method integration with lambda#######
+########api gateway method integration with lambda#######
 module  "upload_api_resource" {
   source                 = "../../modules/terraform/aws/api_gateway/rest_api_resource"
   api_id                 = data.terraform_remote_state.photo_sharing_infra_state.outputs.api_id

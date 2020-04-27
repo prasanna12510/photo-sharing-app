@@ -5,7 +5,7 @@ import uuid
 import os
 
 import logging
-import PIL.Image
+from PIL import Image
 import io
 
 s3 = boto3.client('s3')
@@ -33,7 +33,7 @@ def lambda_handler(event, context):
         object_key = '{image}.{type}'.format(image=image_id,type=image_type)
 
         #open the image
-        img = PIL.Image.open(io.BytesIO(body))
+        img = Image.open(io.BytesIO(body.encode()))
         #convert to bytes
         img_bytes = io.BytesIO()
         #save image to content-type format

@@ -24,9 +24,9 @@ def lambda_handler(event, context):
         image = image[image.find(",")+1:]
 
         image_id = str(uuid.uuid4())[:8]
-
+        object_key = '{id}/{name}'.format(id=image_id, name=name)
         dec = base64.b64decode(image + "===")
-        s3.put_object(Bucket=os.environ["BUCKET_NAME"], Key=image_id/name, Body=dec)
+        s3.put_object(Bucket=os.environ["BUCKET_NAME"], Key=object_key, Body=dec)
 
         return {
         'statusCode': 200,

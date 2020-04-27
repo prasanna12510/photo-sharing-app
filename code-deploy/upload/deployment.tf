@@ -87,7 +87,7 @@ module "upload_image_api_method" {
   lambda_proxy       = true
   api_id             = data.terraform_remote_state.photo_sharing_infra_state.outputs.api_id
   integration_type   = "AWS"
-  http_method        = "POST"
+  http_method        = "POST_PROXY"
   lambda_fuction_arn = module.upload_image_lambda.arn
   api_resource_id    = module.upload_api_resource.resource_id
   api_resource_path  = module.upload_api_resource.resource_path
@@ -99,12 +99,13 @@ module "upload_image_api_method" {
   request_templates = {
   "image/jpeg" =  <<REQUEST_TEMPLATE
   {
-    "content" : "$util.base64Encode($input.body)"
+    body" : "$input.body"
   }
 REQUEST_TEMPLATE
 }
 }
 #"body" : "$input.body"
+#"content" : "$util.base64Encode($input.body)"
 # "content-type": "$util.escapeJavaScript($input.params().header.get('Content-Type'))"
 ########################outputs###########################
 

@@ -1,23 +1,19 @@
 ####lambda function variables####
 variable "request_parameters" {
-  type = list
-  default = [
-    {
+  type = map
+  default = {
       "method.request.path.id"       = true
       "method.request.path.filename" = true
     }
-  ]
 }
 
 
 variable "integration_request_parameters" {
   type = list
-  default = [
-    {
+  default = {
       "integration.request.path.id"       = "method.request.path.id"
       "integration.request.path.filename" = "method.request.path.filename"
     }
-  ]
 }
 
 variable "region" {

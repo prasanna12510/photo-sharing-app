@@ -49,7 +49,7 @@ data "archive_file" "upload_image" {
   source_dir  = "${path.module}/src"
   output_path = "${path.module}/upload_image.zip"
 
-  depends_on = ["null_resource.pip"]
+  depends_on = [null_resource.pip]
 }
 
 

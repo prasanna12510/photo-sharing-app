@@ -19,7 +19,7 @@ logger.setLevel(logging.INFO)
 #self.bucket.put_object(Bucket=self.bucket_name,
 #                       Key=key,
 #                       Body=out_img)
-
+#
 
 def lambda_handler(event, context):
 

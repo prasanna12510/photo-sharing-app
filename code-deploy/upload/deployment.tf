@@ -99,12 +99,13 @@ module "upload_image_api_method" {
   request_templates = {
   "application/json" =  <<REQUEST_TEMPLATE
   {
-  "body" : "$input.body"
+    "content" : "$util.base64Encode($input.body)" 
   }
 REQUEST_TEMPLATE
 }
 }
-
+#"body" : "$input.body"
+# "content-type": "$util.escapeJavaScript($input.params().header.get('Content-Type'))"
 ########################outputs###########################
 
 output "upload_image_lambda_arn" {

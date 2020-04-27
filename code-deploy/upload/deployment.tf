@@ -15,23 +15,6 @@ data "terraform_remote_state" "photo_sharing_infra_state" {
 data "aws_caller_identity" "current" {}
 
 #####create archive for lambda function #######
-/*data "null_data_source" "lambda_file" {
-  inputs = {
-    filename = "${path.module}/src/upload_image.py"
-  }
-}
-
-data "null_data_source" "lambda_archive" {
-  inputs = {
-    filename = "${path.module}/src/upload_image.zip"
-  }
-}
-
-data "archive_file" "upload_image" {
-  type        = "zip"
-  source_file = data.null_data_source.lambda_file.outputs.filename
-  output_path = data.null_data_source.lambda_archive.outputs.filename
-}*/
 
 resource "null_resource" "pip" {
   triggers = {
@@ -121,11 +104,12 @@ module "upload_image_api_method" {
     body" : "$input.body"
   }
 REQUEST_TEMPLATE
-}
-}
 #"body" : "$input.body"
 #"content" : "$util.base64Encode($input.body)"
 # "content-type": "$util.escapeJavaScript($input.params().header.get('Content-Type'))"
+
+}
+}
 ########################outputs###########################
 
 output "upload_image_lambda_arn" {

@@ -21,11 +21,12 @@ def lambda_handler(event, context):
         data  = json.loads(event['body'])
         name  = data['name']
         image = data['file']
-        image = image[image.find(",")+1:]
+        image_data = image[image.find(",")+1:]
+        image_type = image[image.find("data:")+1:image.find(";")].split('/')[1]
 
         image_id = str(uuid.uuid4())[:8]
-        object_key = '{id}/{name}'.format(id=image_id, name=name)
-        dec = base64.b64decode(image + "===")
+        object_key = '{id}/{name}.{type}'.format(id=image_id, name=name,type=image_type)
+        dec = base64.b64decode(image_data + "===")
         s3.put_object(Bucket=os.environ["BUCKET_NAME"], Key=object_key, Body=dec)
 
         return {

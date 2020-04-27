@@ -5,7 +5,7 @@ import uuid
 import os
 
 import logging
-import PIL 
+import PIL
 import io
 
 s3 = boto3.client('s3')
@@ -33,7 +33,16 @@ def lambda_handler(event, context):
         image_type =  content_type.split('/')[1]
         object_key = '{image}.{type}'.format(image=image_id,type=image_type)
 
-        s3.put_object(Bucket=os.environ["BUCKET_NAME"], Key=object_key, Body=body, ContentType=content_type)
+        #open the image
+        img = PIL.Image.open(io.BytesIO(body))
+        #convert to bytes
+        img_bytes = io.BytesIO()
+        #save image to content-type format
+        img.save(img_bytes, format=img.format)
+        #seek to first position
+        img_bytes.seek(0)
+
+        s3.put_object(Bucket=os.environ["BUCKET_NAME"], Key=object_key, Body=img_bytes, ContentType=content_type)
         return {
         'statusCode': 200,
         'body': json.dumps({'image_id': image_id}),

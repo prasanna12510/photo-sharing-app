@@ -93,6 +93,9 @@ module "upload_image_api_method" {
   api_resource_path  = module.upload_api_resource.resource_path
   stage_name         = "dev"
   description        = "Deploy methods: ${module.upload_image_api_method.http_method}"
+  request_parameters = var.request_parameters
+  integration_request_parameters  = var.integration_request_parameters
+  passthrough_behavior = "image/jpeg"
 }
 
 ########################outputs###########################

@@ -53,6 +53,13 @@ variable "integration_type" {
   type = string
 }
 
+
+variable "passthrough_behavior" {
+  type = string
+  default = null
+}
+
+
 variable "integration_request_parameters" {
   type        = map
   default     = {}

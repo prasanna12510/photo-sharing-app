@@ -1,4 +1,26 @@
 ####lambda function variables####
+
+variable "request_parameters" {
+  type = map
+  default =
+    {
+      "method.request.header.Content-Type" = false
+    }
+
+}
+
+
+variable "integration_request_parameters" {
+  type = list
+  default =
+    {
+    "integration.request.header.Accept"       = "'*/*'"
+    "integration.request.header.Content-Type" = "method.request.header.Content-Type"
+
+    }
+
+}
+
 variable "lambda_name" {
   type        = string
   description = "lambda function name"

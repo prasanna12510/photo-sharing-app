@@ -2,18 +2,16 @@
 
 variable "request_parameters" {
   type = map
-  default =
-    {
-      "method.request.header.Content-Type" = "true"
+  default ={
+      "method.request.header.Content-Type" = false
     }
 
 }
 
 
 variable "integration_request_parameters" {
-  type = list
-  default =
-    {
+  type = map
+  default ={
     "integration.request.header.Accept"       = "'*/*'"
     "integration.request.header.Content-Type" = "method.request.header.Content-Type"
 

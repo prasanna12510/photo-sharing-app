@@ -18,9 +18,9 @@ def lambda_handler(event, context):
 
     if event['httpMethod'] == 'POST' :
         image_id = str(uuid.uuid4())[:8]
-        dec = base64.b64decode(event['body'])
+        body = event['body']
         object_key = '{image_id}.jpeg'.format(image_id=image_id)
-        s3.put_object(Bucket=os.environ["BUCKET_NAME"], Key=object_key, Body=dec)
+        s3.put_object(Bucket=os.environ["BUCKET_NAME"], Key=object_key, Body=body)
         return {
         'statusCode': 200,
         'body': json.dumps({'image_id': image_id}),

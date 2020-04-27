@@ -22,7 +22,7 @@ def lambda_handler(event, context):
         content_type = event["headers"]["content-type"]
         image_type =  content_type.split('/')[1]
         logger.info('content-type: `{}`'.format(content_type))
-        object_key = '{image_id}.{image_type}'.format(image_id=image_id,type=image_type)
+        object_key = '{image}.{type}'.format(image=image_id,type=image_type)
         s3.put_object(Bucket=os.environ["BUCKET_NAME"], Key=object_key, Body=body, ContentType=content_type)
         return {
         'statusCode': 200,

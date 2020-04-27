@@ -1,4 +1,4 @@
-# import remote state
+## import remote state
 data "terraform_remote_state" "photo_sharing_infra_state" {
   backend = "remote"
   config = {

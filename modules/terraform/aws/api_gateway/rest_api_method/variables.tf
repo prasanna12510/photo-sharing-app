@@ -38,6 +38,11 @@ variable "request_parameters" {
   description = "A map of request query string parameters and headers that should be passed to the integration. For example: request_parameters = {\"method.request.header.X-Some-Header\" = true \"method.request.querystring.some-query-param\" = true} would define that the header X-Some-Header and the query string some-query-param must be provided in the request."
 }
 
+variable "request_templates" {
+  type        = map
+  default     = {}
+}
+
 variable "lambda_fuction_arn" {
   type = string
   default = ""

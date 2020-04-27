@@ -95,7 +95,14 @@ module "upload_image_api_method" {
   description        = "Deploy methods: ${module.upload_image_api_method.http_method}"
   request_parameters = var.request_parameters
   integration_request_parameters  = var.integration_request_parameters
-  passthrough_behavior = "image/jpeg"
+  passthrough_behavior = "WHEN_NO_TEMPLATES"
+  request_templates = {
+  "application/json" =  <<REQUEST_TEMPLATE
+  {
+  "body" : "$input.body"
+  }
+REQUEST_TEMPLATE
+}
 }
 
 ########################outputs###########################

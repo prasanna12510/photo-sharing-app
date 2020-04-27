@@ -5,7 +5,7 @@ import uuid
 import os
 
 import logging
-from PIL import Image
+import PIL 
 import io
 
 s3 = boto3.client('s3')

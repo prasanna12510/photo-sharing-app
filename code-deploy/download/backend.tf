@@ -10,7 +10,7 @@ terraform {
     organization = "terracloud-utility"
     token        = "TF_CLOUD_TOKEN"
     workspaces {
-      prefix = "photo-sharing-service-code-"
+      prefix = "photo-sharing-service-download-"
     }
   }
 }

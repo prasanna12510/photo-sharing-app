@@ -6,8 +6,8 @@ variable "api_root_resource_id" {
   type = string
 }
 
-variable "path_part" {
-  type        = string
-  default     = null
+variable "path_parts" {
+  type        = list
+  default     = []
   description = "The last path segment of this API resource."
 }

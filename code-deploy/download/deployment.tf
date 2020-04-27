@@ -22,21 +22,21 @@ module  "download_api_resource" {
   source                 = "../../modules/terraform/aws/api_gateway/rest_api_resource"
   api_id                 = data.terraform_remote_state.photo_sharing_infra_state.outputs.api_id
   api_root_resource_id   = data.terraform_remote_state.photo_sharing_infra_state.outputs.api_root_resource_id
-  path_part              = "download"
+  path_parts             = ["download"]
 }
 
 module  "download_api_resource_download_id" {
   source                 = "../../modules/terraform/aws/api_gateway/rest_api_resource"
   api_id                 = data.terraform_remote_state.photo_sharing_infra_state.outputs.api_id
   api_root_resource_id   = module.download_api_resource.resource_id
-  path_part              = "{id}"
+  path_parts              = ["{id}"]
 }
 
 module  "download_api_resource_download_filename" {
   source                 = "../../modules/terraform/aws/api_gateway/rest_api_resource"
   api_id                 = data.terraform_remote_state.photo_sharing_infra_state.outputs.api_id
   api_root_resource_id   = module.download_api_resource_download_id.resource_id
-  path_part              = "{filename}"
+  path_parts             = ["{filename}"]
 }
 
 module "download_image_api_method" {

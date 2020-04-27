@@ -9,7 +9,7 @@ variable "request_parameters" {
 
 
 variable "integration_request_parameters" {
-  type = list
+  type = map
   default = {
       "integration.request.path.id"       = "method.request.path.id"
       "integration.request.path.filename" = "method.request.path.filename"

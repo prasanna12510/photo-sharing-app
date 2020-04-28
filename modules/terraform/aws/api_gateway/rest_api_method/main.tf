@@ -22,7 +22,7 @@ resource "aws_api_gateway_integration" "api-method-integration_proxy" {
   http_method             = aws_api_gateway_method.api-method.http_method
   integration_http_method = var.http_method
   type                    = var.integration_type
-  uri                     = var.lambda_proxy ? "arn:aws:apigateway:${var.region}:lambda:path/2015-03-31/functions/${var.lambda_fuction_arn}/invocations" :  "arn:aws:apigateway:${var.region}:s3:path/${var.bucket_name}/{id}/{filename}"
+  uri                     = var.lambda_proxy ? "arn:aws:apigateway:${var.region}:lambda:path/2015-03-31/functions/${var.lambda_fuction_arn}/invocations" :  "arn:aws:apigateway:${var.region}:s3:path/${var.bucket_name}/{image_id}"
   credentials             = var.lambda_proxy ? "" : var.credentials
   request_parameters      = var.integration_request_parameters
   passthrough_behavior    = var.passthrough_behavior

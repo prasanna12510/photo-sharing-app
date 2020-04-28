@@ -32,12 +32,12 @@ def resize_image(bucket_name, key, size):
     obj_body = obj.get()['Body'].read()
 
     img = Image.open(BytesIO(obj_body))
-    img_fmt = img.format
+    imgfmt = img.format
     img = img.resize(
         (int(size_split[0]), int(size_split[1])), PIL.Image.ANTIALIAS
     )
     buffer = BytesIO()
-    img.save(buffer, img_fmt)
+    img.save(buffer, imgfmt)
     buffer.seek(0)
 
     resized_key = "{item}-{size}.{type}".format(item=key,size=size,type=imgfmt.lower())
@@ -46,7 +46,7 @@ def resize_image(bucket_name, key, size):
         bucket_name=bucket_name,
         key=resized_key,
     )
-    obj.put(Body=buffer, ContentType='image/' + img.format.lower())
+    obj.put(Body=buffer, ContentType='image/' + imgfmt.lower())
 
     return resized_key
 

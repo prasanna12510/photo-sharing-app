@@ -5,6 +5,14 @@ resource "aws_api_gateway_method" "api-method" {
   authorization        = var.authorization
   api_key_required     = var.api_key_required
   request_parameters   = var.request_parameters
+  request_validator_id = aws_api_gateway_request_validator.api-method-request-validator.id
+}
+
+resource "aws_api_gateway_request_validator" "api-method-request-validator" {
+  name                        = "api_gateway_request_validator"
+  rest_api_id                 = var.api_id
+  validate_request_body       = true
+  validate_request_parameters = true
 }
 
 resource "aws_api_gateway_integration" "api-method-integration_proxy" {
@@ -130,7 +138,6 @@ resource "aws_api_gateway_integration" "itemOptionsMethod-ApiProxyIntegration" {
 EOF
   }
 }
-
 
 resource "aws_api_gateway_deployment" "api_deployment" {
   rest_api_id = var.api_id

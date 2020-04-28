@@ -95,21 +95,23 @@ module "upload_image_api_method" {
   api_resource_path  = module.upload_api_resource.resource_path
   stage_name         = "dev"
   description        = "Deploy methods: ${module.upload_image_api_method.http_method}"
+  credentials        = data.terraform_remote_state.photo_sharing_infra_state.outputs.api_gateway_role_arn
   request_parameters = var.request_parameters
   integration_request_parameters  = var.integration_request_parameters
-  passthrough_behavior = "WHEN_NO_TEMPLATES"
-  request_templates = {
+  #passthrough_behavior = "WHEN_NO_TEMPLATES"
+  /*request_templates = {
   "image/jpeg" =  <<REQUEST_TEMPLATE
   {
     body" : "$input.body"
   }
 REQUEST_TEMPLATE
+}*/
+}
+
 #"body" : "$input.body"
 #"content" : "$util.base64Encode($input.body)"
 # "content-type": "$util.escapeJavaScript($input.params().header.get('Content-Type'))"
 
-}
-}
 ########################outputs###########################
 
 output "upload_image_lambda_arn" {

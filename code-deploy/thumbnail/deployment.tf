@@ -61,7 +61,6 @@ module "thumbnail_image_lambda" {
     ENVIRONMENT    = terraform.workspace
     LOG_EVENTS     = var.lambda_log_events
     BUCKET_NAME    = data.terraform_remote_state.photo_sharing_infra_state.outputs.image_storage_s3_bucket_name
-    AWS_REGION     = var.region
   }
 }
 

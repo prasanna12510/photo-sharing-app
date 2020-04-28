@@ -26,7 +26,6 @@ module "image_storage_s3_bucket" {
   s3_tags = {
     Name = local.image_storage_bucket_name
   }
-  policy = data.aws_iam_policy_document.s3_policy.json
 }
 
 output "lambda_source_code_s3_bucket_name" {

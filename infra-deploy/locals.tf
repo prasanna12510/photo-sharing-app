@@ -14,6 +14,7 @@ locals {
 
   #api_gateway variables
   api_gateway_role_name                     = "${var.service_name}-apigateway-role-${terraform.workspace}"
+  api_gateway_policy_name                   = "${var.service_name}-apigateway-policy-${terraform.workspace}"
 
 
   #s3 variables

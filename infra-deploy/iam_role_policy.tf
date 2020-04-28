@@ -11,7 +11,7 @@ module "lambda_custom_policy" {
 
   iam_custom_policy_name      = local.lambda_policy_name
   iam_custom_role_policy_data = data.aws_iam_policy_document.lambda_runtime_policy.json
-  role_name                   = [local.lambda_role_name]
+  role_name                   = [module.lambda_role.role_name]
 }
 
 
@@ -30,6 +30,15 @@ module "api_gateway_managed_policy" {
   role_name               = module.api_gateway_role.role_name
   iam_managed_policy_arns = var.aws_iam_managed_policy_arns
 }
+
+module "api_gateway_custom_policy" {
+  source = "../modules/terraform/aws/iam/role_policy/policy/custom"
+
+  iam_custom_policy_name      = local.api_gateway_policy_name
+  iam_custom_role_policy_data = data.aws_iam_policy_document.s3_policy.json
+  role_name                   = [module.api_gateway_role.role_name]
+}
+
 
 
 #outputs

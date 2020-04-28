@@ -8,7 +8,6 @@ import logging
 import io
 
 s3 = boto3.client('s3')
-
 logger = logging.getLogger()
 logger.setLevel(logging.INFO)
 

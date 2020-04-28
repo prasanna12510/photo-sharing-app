@@ -12,7 +12,6 @@ import logging
     return "https://s3-{region}.amazonaws.com/{bucket}/{resized_key}".format(
         bucket=bucket, region=region, resized_key=resized_key
     )'''
-
 logger = logging.getLogger()
 logger.setLevel(logging.INFO)
 

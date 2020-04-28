@@ -17,7 +17,7 @@ data "aws_caller_identity" "current" {}
 #####create archive for lambda function #######
 
 resource "null_resource" "pip" {
-  triggers {
+  triggers = {
     main         = "${base64sha256(file("src/thumbnail_image.py"))}"
     requirements = "${base64sha256(file("src/requirements.txt"))}"
   }
@@ -32,7 +32,7 @@ data "archive_file" "thumbnail_image" {
   source_dir  = "${path.module}/src"
   output_path = "${path.module}/thumbnail_image.zip"
 
-  depends_on = ["null_resource.pip"]
+  depends_on = [null_resource.pip]
 }
 
 ###### upload source code to s3 bucket ######

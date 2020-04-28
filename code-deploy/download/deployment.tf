@@ -25,18 +25,11 @@ module  "download_api_resource" {
   path_parts             = ["download"]
 }
 
-module  "download_api_resource_id" {
+module  "download_api_resource_image_id" {
   source                 = "../../modules/terraform/aws/api_gateway/rest_api_resource"
   api_id                 = data.terraform_remote_state.photo_sharing_infra_state.outputs.api_id
   api_root_resource_id   = module.download_api_resource.resource_id
-  path_parts              = ["{id}"]
-}
-
-module  "download_api_resource_filename" {
-  source                 = "../../modules/terraform/aws/api_gateway/rest_api_resource"
-  api_id                 = data.terraform_remote_state.photo_sharing_infra_state.outputs.api_id
-  api_root_resource_id   = module.download_api_resource_id.resource_id
-  path_parts             = ["{filename}"]
+  path_parts              = ["{image_id}"]
 }
 
 module "download_image_api_method" {
@@ -46,8 +39,8 @@ module "download_image_api_method" {
   integration_type                = "AWS"
   http_method                     = "GET"
   bucket_name                     = data.terraform_remote_state.photo_sharing_infra_state.outputs.image_storage_s3_bucket_name
-  api_resource_id                 = module.download_api_resource_filename.resource_id
-  api_resource_path               = module.download_api_resource_filename.resource_path
+  api_resource_id                 = module.download_api_resource_image_id.resource_id
+  api_resource_path               = module.download_api_resource_image_id.resource_path
   request_parameters              = var.request_parameters
   integration_request_parameters  = var.integration_request_parameters
   credentials                     = data.terraform_remote_state.photo_sharing_infra_state.outputs.api_gateway_role_arn
@@ -56,8 +49,6 @@ module "download_image_api_method" {
 }
 
 ########################outputs###########################
-
-
 output "download_image_api_method_id" {
   value = module.download_image_api_method.http_method_id
 }

@@ -87,6 +87,12 @@ jobs:
         with:
           fetch-depth: 100
 
+      - name: Set up Python 3.7
+        uses: actions/setup-python@v1
+        with:
+          python-version: '3.7.6'
+          architecture: 'x64'
+
       - uses: marceloprado/has-changed-path@master
         id: changed-code-deploy-convert
         with:
@@ -117,6 +123,12 @@ jobs:
         uses: actions/checkout@v2
         with:
           fetch-depth: 100
+
+      - name: Set up Python 3.7
+        uses: actions/setup-python@v1
+        with:
+          python-version: '3.7.6' 
+          architecture: 'x64'
 
       - uses: marceloprado/has-changed-path@master
         id: changed-code-deploy-thumbnail

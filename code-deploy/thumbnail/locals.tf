@@ -2,8 +2,8 @@
 locals {
 
   write_object_to_s3       = [{
-                                source = data.archive_file.thumbnail_image[0].output_path
-                                key = "v${var.commit_sha}/thumbnail_image.zip"
+                                source = data.archive_file.thumbnail_image.output_path
+                                key = "thumbnail_image/v${var.commit_sha}/thumbnail_image.zip"
                               }]
 
   account_id               = data.aws_caller_identity.current.account_id

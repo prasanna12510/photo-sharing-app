@@ -97,7 +97,7 @@ module "thumbnail_image_api_method" {
   lambda_proxy       = true
   api_id             = data.terraform_remote_state.photo_sharing_infra_state.outputs.api_id
   integration_type   = "AWS_PROXY"
-  http_method        = "GET"
+  http_method        = "POST"
   request_validator_name = "thumbnail_image_request_validator"
   lambda_fuction_arn = module.thumbnail_image_lambda.arn
   api_resource_id    = module.thumbnail_api_resource_image_id.resource_id

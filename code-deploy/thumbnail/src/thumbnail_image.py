@@ -17,6 +17,7 @@ logger.setLevel(logging.INFO)
 
 def resize_image(bucket_name, key, size):
     size_split = size.split('x')
+    filename=key.split(".")[0]
     s3 = boto3.resource('s3')
 
     try:
@@ -40,7 +41,7 @@ def resize_image(bucket_name, key, size):
     img.save(buffer, imgfmt)
     buffer.seek(0)
 
-    resized_key = "{item}-{size}.{type}".format(item=key,size=size,type=imgfmt.lower())
+    resized_key = "{item}-{size}.{type}".format(item=filename,size=size,type=imgfmt.lower())
 
     obj = s3.Object(
         bucket_name=bucket_name,

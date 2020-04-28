@@ -1,4 +1,4 @@
-##############locals############
+#############locals############
 locals {
 
   write_object_to_s3       = [{

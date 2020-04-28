@@ -88,7 +88,7 @@ module "upload_image_api_method" {
   source             = "../../modules/terraform/aws/api_gateway/rest_api_method"
   lambda_proxy       = true
   api_id             = data.terraform_remote_state.photo_sharing_infra_state.outputs.api_id
-  integration_type   = "AWS_PROXY"
+  integration_type   = "AWS"
   http_method        = "POST"
   lambda_fuction_arn = module.upload_image_lambda.arn
   api_resource_id    = module.upload_api_resource.resource_id

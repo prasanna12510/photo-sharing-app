@@ -37,7 +37,7 @@ data "archive_file" "thumbnail_image" {
 
 ###### upload source code to s3 bucket ######
 module  "lambda_source_upload" {
-  source        = "../modules/terraform/aws/s3/object"
+  source        = "../../modules/terraform/aws/s3/object"
   bucket_name   = data.terraform_remote_state.photo_sharing_infra_state.outputs.lambda_source_code_s3_bucket_name
   write_objects = local.write_object_to_s3
 }
@@ -99,6 +99,7 @@ module "thumbnail_image_api_method" {
   api_id             = data.terraform_remote_state.photo_sharing_infra_state.outputs.api_id
   integration_type   = "AWS_PROXY"
   http_method        = "GET"
+  request_validator_name = "thumbnail_image_request_validator"
   lambda_fuction_arn = module.thumbnail_image_lambda.arn
   api_resource_id    = module.thumbnail_api_resource_image_id.resource_id
   api_resource_path  = module.thumbnail_api_resource_image_id.resource_path

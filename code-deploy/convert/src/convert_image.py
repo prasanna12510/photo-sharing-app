@@ -1,4 +1,3 @@
-import datetime
 import json
 import os
 from io import BytesIO
@@ -6,66 +5,69 @@ from io import BytesIO
 import boto3
 import PIL
 from PIL import Image
+import logging
+
+logger = logging.getLogger()
+logger.setLevel(logging.INFO)
 
 ALLOWED_EXTENSIONS = set(['png', 'jpg', 'jpeg', 'gif'])
 
-
-def resized_image_url(converted_key, bucket, region):
-    return "https://s3-{region}.amazonaws.com/{bucket}/{converted_key}".format(
-        bucket=bucket, region=region, converted_key=converted_key
-    )
 
 def allowed_file(filename):
 	return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
 
-def convert_image(bucket_name, key, output_type):
+def convert_image(bucket_name, key, output_format):
+    filename=key.split(".")[0]
+    s3 = boto3.resource('s3')
 
-    if file and allowed_file(output_type):
-
-        key_split = key.split('/')
-		s3 = boto3.resource('s3')
+    try:
         obj = s3.Object(
             bucket_name=bucket_name,
             key=key,
         )
-        obj_body = obj.get()['Body'].read()
+    except Exception:
+        print("Error when fetching image: " + key)
+        raise Exception("Not found")
 
-        img = Image.open(BytesIO(obj_body))
 
-        buffer = BytesIO()
-        img.save(buffer, output_type)
-        buffer.seek(0)
+    obj_body = obj.get()['Body'].read()
 
-        converted_key = "{folder}/converted_{item}".format(folder=key_split[0],item=key_split[1])
+    img = Image.open(BytesIO(obj_body))
+    buffer = BytesIO()
+    img.save(buffer, output_format)
+    buffer.seek(0)
 
-        obj = s3.Object(
-            bucket_name=bucket_name,
-            key=converted_key,
-        )
-        content_type = "image/{type}".format(type=output_type)
-        obj.put(Body=buffer, ContentType=content_type)
+    converted_key = "{item}.{type}".format(item=filename,type=output_format.lower())
 
-        return converted_image_url(
-            converted_key, bucket_name, os.environ["AWS_REGION"]
-        )
-	else:
-        return json.dumps({'message' : 'Allowed file types are png, jpg, jpeg, gif'})
+    obj = s3.Object(
+        bucket_name=bucket_name,
+        key=converted_key,
+    )
+    obj.put(Body=buffer, ContentType='image/' + output_format.lower())
 
+    return converted_key
 
 
 def lambda_handler(event, context):
-    key         =  event["pathParameters"]["id"] + "/" + event["pathParameters"]["filename"]
-    output_type = event["queryStringParameters"]["output"]
+    if 'LOG_EVENTS' in os.environ and os.environ['LOG_EVENTS'] == 'true':
+        logger.info('Event logging enabled: `{}`'.format(json.dumps(event)))
 
-    result_url = convert_image(os.environ["BUCKET_NAME"], key, filename ,output_type)
+    key           =  event["pathParameters"]["image_id"]
+    output_format = event["queryStringParameters"]["output"]
 
-    response = {
-        "statusCode": 301,
-        "body": "",
-        "headers": {
-            "location": result_url
+    if key and allowed_file(output_format.lower()):
+        convert_image_id = convert_image(os.environ["BUCKET_NAME"], key, output_format.upper())
+        response = {
+        'statusCode': 200,
+        'body': json.dumps({"image_id": converted_image_id,
+        "message":"image converted successfully, access using download/<image_id>.<image_type>"}),
+        'headers': {'Access-Control-Allow-Origin': '*'}
         }
-    }
-
+    else:
+        response = {
+        'statusCode': 400,
+        'body': json.dumps({'message' : 'Allowed output file types are png, jpg, jpeg, gif'}),
+        'headers': {'Access-Control-Allow-Origin': '*'}
+        }
     return response

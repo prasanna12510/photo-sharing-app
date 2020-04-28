@@ -6,7 +6,7 @@ data "terraform_remote_state" "photo_sharing_infra_state" {
     organization = "terracloud-utility"
     token        = "TF_CLOUD_TOKEN"
     workspaces = {
-      name = "photo-sharing-infra-${terraform.workspace}"
+      name = "photo-sharing-service-infra-${terraform.workspace}"
     }
   }
 }
@@ -32,7 +32,7 @@ data "archive_file" "convert_image" {
   source_dir  = "${path.module}/src"
   output_path = "${path.module}/convert_image.zip"
 
-  depends_on = ["null_resource.pip"]
+  depends_on = [null_resource.pip]
 }
 
 ###### upload source code to s3 bucket ######
@@ -54,7 +54,7 @@ module "convert_image_lambda" {
   timeout                = var.lambda_timeout
   func_name              = var.lambda_name
   func_handler           = var.lambda_handler_name
-  source_code_hash       = base64sha256(data.archive_file.convert_image[0].output_path)
+  source_code_hash       = base64sha256(data.archive_file.convert_image.output_path)
   description            = var.lambda_function_decsription
   tags                   = local.tags
   environment_variables  = {
@@ -76,31 +76,41 @@ module "convert_image_lambda_permission" {
 }
 
 
-########api gateway method integration with lambda#######
+#######api gateway method integration with lambda#######
+#/convert/{image_id}?output=png
 module  "convert_api_resource" {
-  rest_api_id = data.terraform_remote_state.photo_sharing_infra_state.outputs.api_id
-  parent_id   = "${aws_api_gateway_rest_api.api.root_resource_id}"
-  path_parts  = ["convert","{id}","{filename}"]
+  source                 = "../../modules/terraform/aws/api_gateway/rest_api_resource"
+  api_id                 = data.terraform_remote_state.photo_sharing_infra_state.outputs.api_id
+  api_root_resource_id   = data.terraform_remote_state.photo_sharing_infra_state.outputs.api_root_resource_id
+  path_parts             = ["convert"]
 }
+
+module  "convert_api_resource_image_id" {
+  source                 = "../../modules/terraform/aws/api_gateway/rest_api_resource"
+  api_id                 = data.terraform_remote_state.photo_sharing_infra_state.outputs.api_id
+  api_root_resource_id   = module.convert_api_resource.resource_id
+  path_parts              = ["{image_id}"]
+}
+
 
 module "convert_image_api_method" {
   source             = "../../modules/terraform/aws/api_gateway/rest_api_method"
+  lambda_proxy       = true
   api_id             = data.terraform_remote_state.photo_sharing_infra_state.outputs.api_id
-  integration_type   = "AWS"
-  http_method        = "GET"
+  integration_type   = "AWS_PROXY"
+  http_method        = "POST"
+  request_validator_name = "convert_image_request_validator"
   lambda_fuction_arn = module.convert_image_lambda.arn
-  api_resource_id    = "${module.convert_api_resource.api_resource_id}"
-  api_resource_path  = "${module.convert_api_resource.api_resource_path}"
-}
-
-
-# deploy api
-module  "convert_image_api_deployment" {
-  source             = "../../modules/terraform/aws/api_gateway/rest_api_deployment"
-  api_id             = data.terraform_remote_state.photo_sharing_infra_state.outputs.api_id
-  stage_name         = "development"
+  api_resource_id    = module.convert_api_resource_image_id.resource_id
+  api_resource_path  = module.convert_api_resource_image_id.resource_path
+  stage_name         = "dev"
   description        = "Deploy methods: ${module.convert_image_api_method.http_method}"
+  credentials        = data.terraform_remote_state.photo_sharing_infra_state.outputs.api_gateway_role_arn
+  request_parameters = var.request_parameters
+  integration_request_parameters  = var.integration_request_parameters
 }
+
+
 ########################outputs###########################
 
 output "convert_image_lambda_arn" {
@@ -108,13 +118,13 @@ output "convert_image_lambda_arn" {
 }
 
 output "convert_image_api_method_id" {
-  value = module.convert_image_api_method.id
+  value = module.convert_image_api_method.http_method_id
 }
 
 output "convert_image_api_invoke_url" {
-  value = module.convert_image_api_deployment.invoke_url
+  value = module.convert_image_api_method.invoke_url
 }
 
 output "apigw_execution_arn" {
-  value = module.convert_image_api_deployment.execution_arn
+  value = module.convert_image_api_method.execution_arn
 }

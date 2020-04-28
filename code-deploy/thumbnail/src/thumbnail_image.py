@@ -7,11 +7,6 @@ import PIL
 from PIL import Image
 import logging
 
-
-'''def resized_image_url(resized_key, bucket, region):
-    return "https://s3-{region}.amazonaws.com/{bucket}/{resized_key}".format(
-        bucket=bucket, region=region, resized_key=resized_key
-    )'''
 logger = logging.getLogger()
 logger.setLevel(logging.INFO)
 

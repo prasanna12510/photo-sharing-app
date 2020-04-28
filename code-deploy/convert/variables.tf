@@ -1,3 +1,22 @@
+####apigw integration variables####
+variable "request_parameters" {
+  type = map
+  default = {
+      "method.request.path.image_id"    = true
+      "method.request.querystring.output" = true
+    }
+}
+
+
+variable "integration_request_parameters" {
+  type = map
+  default = {
+      "integration.request.path.image_id"    = "method.request.path.image_id"
+      "integration.request.querystring.output" = "method.request.querystring.output"
+    }
+}
+
+
 ####lambda function variables####
 variable "lambda_name" {
   type        = string
@@ -25,7 +44,7 @@ variable "lambda_handler_name" {
 
 variable "lambda_timeout" {
   type        = number
-  default     = 30
+  default     = 60
 }
 
 variable "lambda_log_events" {

@@ -38,6 +38,7 @@ module "download_image_api_method" {
   api_id                          = data.terraform_remote_state.photo_sharing_infra_state.outputs.api_id
   integration_type                = "AWS"
   http_method                     = "GET"
+  request_validator_name          = "download_image_request_validator"
   bucket_name                     = data.terraform_remote_state.photo_sharing_infra_state.outputs.image_storage_s3_bucket_name
   api_resource_id                 = module.download_api_resource_image_id.resource_id
   api_resource_path               = module.download_api_resource_image_id.resource_path

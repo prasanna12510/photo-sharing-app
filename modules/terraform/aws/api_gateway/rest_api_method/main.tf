@@ -9,7 +9,7 @@ resource "aws_api_gateway_method" "api-method" {
 }
 
 resource "aws_api_gateway_request_validator" "api-method-request-validator" {
-  name                        = "api_gateway_request_validator"
+  name                        = var.request_validator_name
   rest_api_id                 = var.api_id
   validate_request_body       = true
   validate_request_parameters = true

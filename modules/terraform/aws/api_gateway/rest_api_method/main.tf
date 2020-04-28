@@ -17,8 +17,8 @@ resource "aws_api_gateway_integration" "api-method-integration_proxy" {
   uri                     = var.lambda_proxy ? "arn:aws:apigateway:${var.region}:lambda:path/2015-03-31/functions/${var.lambda_fuction_arn}/invocations" :  "arn:aws:apigateway:${var.region}:s3:path/${var.bucket_name}/{id}/{filename}"
   credentials             = var.lambda_proxy ? "" : var.credentials
   request_parameters      = var.integration_request_parameters
-  #passthrough_behavior    = var.passthrough_behavior
-  #request_templates       = var.request_templates
+  passthrough_behavior    = var.passthrough_behavior
+  request_templates       = var.request_templates
   depends_on              = [aws_api_gateway_method.api-method]
 }
 

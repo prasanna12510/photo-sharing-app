@@ -27,6 +27,11 @@ aws_route_table:
 aws_network_interface:
 aws_route53_zone:
   - id: NOT(Z00020581UIDEFUOIV96B)
+aws_vpc::
+  - id: NOT(vpc-01615566)
+
+
+#djc8kr78e5
 # aws_iam_group:
 # aws_iam_instance_profile:
 # aws_iam_policy:

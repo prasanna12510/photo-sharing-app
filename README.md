@@ -3,5 +3,5 @@
 
 #### AWS API-Architecture
 
-![Alt text](https://github.com/prasanna12510/photo-sharing-app/blob/master/APIArchitecture.png?raw=true "AWSArchitecture")
+![Alt text](https://github.com/prasanna12510/photo-sharing-app/blob/master/doc/img/APIArchitecture.png?raw=true "AWSArchitecture")
 
